@@ -1,0 +1,10 @@
+FROM mysql:latest
+
+ENV MYSQL_ROOT_PASSWORD=Senha123
+ENV MYSQL_DATABASE=Empresa
+ENV MYSQL_USER=App
+ENV MYSQL_PASSWORD=senha123
+
+COPY tabelas.sql /docker-entrypoint-initdb.d/
+
+EXPOSE 3306

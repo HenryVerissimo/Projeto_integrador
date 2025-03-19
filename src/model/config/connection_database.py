@@ -3,7 +3,7 @@ from sqlalchemy import create_engine
 
 class ConnectionDataBase:
     def __init__(self):
-        self.__engine_string = "mysql+pymql//User:Senha123@localhost/LocacaoJogos" #Trocar para o ip do servidor local no dia da apresentação
+        self.__engine_string = "mysql+pymysql://User:Senha123@localhost:3306/LocacaoJogos" #Trocar para o ip do servidor local no dia da apresentação
         self.__engine = self.__create_engine()
         self.session = None
 

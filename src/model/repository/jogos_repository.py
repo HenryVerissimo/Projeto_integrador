@@ -6,7 +6,7 @@ class JogosRepository:
     @staticmethod
     def insert(nome:str, preco:float, genero:str, descricao:str) -> None:
         with ConnectionDataBase() as conection:
-            novo_jogo = Jogos(nome, preco, genero, descricao)
+            novo_jogo = Jogos(nome=nome, preco=preco, genero=genero, descricao=descricao)
             conection.session.add(novo_jogo)
             conection.session.commit()
 

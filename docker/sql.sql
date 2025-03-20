@@ -16,12 +16,12 @@ CREATE TABLE users (
     user_status BOOLEAN DEFAULT TRUE
 );
 
-CREATE TABLE rental (
-    rental_id  INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE filme_location (
+    filme_location_id  INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
     game_id INT,
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (game_id) REFERENCES games(game_id),
-    rental_data DATETIME DEFAULT CURRENT_TIMESTAMP,
+    filme_location_data DATETIME DEFAULT CURRENT_TIMESTAMP,
     return_data DATE    
 );

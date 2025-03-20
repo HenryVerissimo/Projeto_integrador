@@ -13,5 +13,5 @@ class Games(Base):
     game_description= Column(Text)
     
     def __repr__(self):
-        return f"Games(id={self.game_id}, name={self.game_name}, price={self.game_price}, genre={self.game_genre}, description={self.game_description})"
+        return f"Games(game_id={self.game_id}, gane_name={self.game_name}, game_price={self.game_price}, game_genre={self.game_genre}, game_description={self.game_description})"
  

@@ -11,4 +11,4 @@ class Users(Base):
     user_status = Column(Boolean, default=True)
 
     def __repr__(self):
-        return f"users(id={self.user_id}, user={self.user_name}, email={self.user_email}, password={self.user_password}, user_status={self.user_status})"
+        return f"users(user_id={self.user_id}, user_name={self.user_name}, user_email={self.user_email}, user_password={self.user_password}, user_status={self.user_status})"

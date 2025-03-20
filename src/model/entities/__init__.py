@@ -1,3 +1,3 @@
 from .games import Games
-from .rental import Rental
+from .film_location import FilmLocation
 from .users import Users

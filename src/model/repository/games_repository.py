@@ -5,10 +5,10 @@ class GamesRepository:
     
     @staticmethod
     def insert(name:str, price:float, genre:str, description:str) -> None:
-        with ConnectionDataBase() as conection:
+        with ConnectionDataBase() as connection:
             new_game = Games(game_name=name, game_price=price, game_genre=genre, game_description=description)
-            conection.session.add(new_game)
-            conection.session.commit()
+            connection.session.add(new_game)
+            connection.session.commit()
 
     @staticmethod
     def select() -> list:

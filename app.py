@@ -1,6 +1,5 @@
 from flask import Flask
 
-
 class MyApplication:
     def __init__(self):
         self.app = Flask(__name__, template_folder="src/templates")

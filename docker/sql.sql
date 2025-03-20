@@ -1,27 +1,27 @@
-USE LocacaoJogos;
+USE RentalGames;
 
-CREATE TABLE jogos (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
-    preco DECIMAL(10, 2) NOT NULL,
-    genero VARCHAR(100),
-    descricao TEXT
+CREATE TABLE games (
+    game_id INT AUTO_INCREMENT PRIMARY KEY,
+    game_name VARCHAR(100) NOT NULL,
+    game_price DECIMAL(10, 2) NOT NULL,
+    game_genre VARCHAR(100),
+    game_description TEXT
 );
 
-CREATE TABLE usuarios (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL,
-    senha VARCHAR(20) NOT NULL,
-    usuario_status BOOLEAN DEFAULT TRUE
+CREATE TABLE users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_name VARCHAR(100) NOT NULL,
+    user_email VARCHAR(100) NOT NULL,
+    user_password VARCHAR(20) NOT NULL,
+    user_status BOOLEAN DEFAULT TRUE
 );
 
-CREATE TABLE locacao (
-    id  INT AUTO_INCREMENT PRIMARY KEY,
-    id_usuario INT,
-    id_jogo INT,
-    FOREIGN KEY (id_usuario) REFERENCES usuarios(id),
-    FOREIGN KEY (id_jogo) REFERENCES jogos(id),
-    data_locacao DATETIME DEFAULT CURRENT_TIMESTAMP,
-    data_devolucao DATE
+CREATE TABLE rental (
+    rental_id  INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    game_id INT,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (game_id) REFERENCES games(game_id),
+    rental_data DATETIME DEFAULT CURRENT_TIMESTAMP,
+    return_data DATE    
 );

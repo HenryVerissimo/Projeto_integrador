@@ -4,6 +4,7 @@ CREATE TABLE games (
     game_id INT AUTO_INCREMENT PRIMARY KEY,
     game_name VARCHAR(100) NOT NULL,
     game_price DECIMAL(10, 2) NOT NULL,
+    game_quantity INT DEFAULT 0,
     game_genre VARCHAR(100),
     game_description TEXT
 );
@@ -24,4 +25,13 @@ CREATE TABLE game_rental (
     FOREIGN KEY (game_id) REFERENCES games(game_id),
     game_rental_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     game_return_date DATE    
+);
+
+CREATE TABLE admin (
+    admin_id INT AUTO_INCREMENT PRIMARY KEY,
+    admin_name VARCHAR(100) NOT NULL,
+    admin_email VARCHAR(100) NOT NULL,
+    admin_password VARCHAR(20) NOT NULL,
+    admin_level INT DEFAULT 1,
+    admin_status BOLLEAN DEFAULT TRUE
 );

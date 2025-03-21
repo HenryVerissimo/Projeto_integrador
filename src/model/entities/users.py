@@ -8,6 +8,8 @@ class Users(Base):
     user_name = Column(String(100), nullable=False)
     user_email = Column(String(100), nullable=False)
     user_password = Column(String(20), nullable=False)
+    user_admin = Column(Boolean, default=False)
+    user_admin_level = Column(Integer, default=0)
     user_status = Column(Boolean, default=True)
 
     def __repr__(self):

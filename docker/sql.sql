@@ -14,6 +14,8 @@ CREATE TABLE users (
     user_name VARCHAR(100) NOT NULL,
     user_email VARCHAR(100) NOT NULL,
     user_password VARCHAR(20) NOT NULL,
+    user_admin BOOLEAN DEFAULT FALSE,
+    user_admin_level INT DEFAULT 0,
     user_status BOOLEAN DEFAULT TRUE
 );
 
@@ -25,13 +27,4 @@ CREATE TABLE game_rental (
     FOREIGN KEY (game_id) REFERENCES games(game_id),
     game_rental_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     game_return_date DATE    
-);
-
-CREATE TABLE admin (
-    admin_id INT AUTO_INCREMENT PRIMARY KEY,
-    admin_name VARCHAR(100) NOT NULL,
-    admin_email VARCHAR(100) NOT NULL,
-    admin_password VARCHAR(20) NOT NULL,
-    admin_level INT DEFAULT 1,
-    admin_status BOLLEAN DEFAULT TRUE
 );

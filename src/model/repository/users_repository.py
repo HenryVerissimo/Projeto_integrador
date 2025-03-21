@@ -5,7 +5,7 @@ from src.model import Users
 class UsersRepository:
 
     @staticmethod
-    def insert(name:str, email:str, password:str) -> None:
+    def insert(name:str, email:str, password:str, user_admin:bool = False, user_admin_level: int = 0) -> None:
         with ConnectionDataBase() as connect:
             new_user = Users(user_name=name, user_email=email, user_password=password)
             connect.session.add(new_user)

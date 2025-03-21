@@ -4,7 +4,7 @@ from src.model import Base
 
 
 class Games(Base):
-    __tablename__ = "Games"
+    __tablename__ = "games"
 
     game_id = Column(Integer, primary_key=True)
     game_name = Column(String(100), nullable=False)

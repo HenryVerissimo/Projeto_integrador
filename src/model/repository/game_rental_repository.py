@@ -1,12 +1,12 @@
 from src.model import ConnectionDataBase
-from src.model import FilmLocation
+from src.model import GameRental
 
 
-class FilmLocationRepository:
+class GameRentalRepository:
 
     @staticmethod
-    def insert(data:str) -> None:
+    def insert(date:str) -> None:
         with ConnectionDataBase() as connection:
-            new_location = FilmLocation(filme_location_data=data) 
+            new_location = GameRental(game_return_date=date) 
             connection.session.add(new_location)
             connection.session.commit()

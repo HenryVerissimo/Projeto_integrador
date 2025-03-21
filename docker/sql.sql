@@ -1,4 +1,4 @@
-USE RentalGames;
+USE GameRental;
 
 CREATE TABLE games (
     game_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -16,12 +16,12 @@ CREATE TABLE users (
     user_status BOOLEAN DEFAULT TRUE
 );
 
-CREATE TABLE filme_location (
-    filme_location_id  INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE game_rental (
+    game_rental_id  INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
     game_id INT,
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (game_id) REFERENCES games(game_id),
-    filme_location_data DATETIME DEFAULT CURRENT_TIMESTAMP,
-    return_data DATE    
+    game_rental_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    game_return_date DATE    
 );

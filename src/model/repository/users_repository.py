@@ -5,9 +5,9 @@ from src.model import Users
 class UsersRepository:
 
     @staticmethod
-    def insert(name:str, email:str, password:str, user_admin:bool = False, user_admin_level: int = 0) -> None:
+    def insert(name:str, email:str, password:str, admin:bool = False, admin_level: int = 0) -> None:
         with ConnectionDataBase() as connect:
-            new_user = Users(user_name=name, user_email=email, user_password=password)
+            new_user = Users(user_name=name, user_email=email, user_password=password, user_admin=admin, user_admin_level= admin_level)
             connect.session.add(new_user)
             connect.session.commit()
 
@@ -24,8 +24,8 @@ class UsersRepository:
             return query
     
     @staticmethod   
-    def update(id:int, name:str = None, email:str = None, password:int = None) -> None:
-        parameters = {"user_name": name, "user_email": email, "user_password": password}
+    def update(id:int, name:str = None, email:str = None, password:int = None, admin:bool = None, admin_level:int = 0) -> None:
+        parameters = {"user_name": name, "user_email": email, "user_password": password, "user_admin": admin, "user_admin_level": admin_level}
 
         for key, value in parameters.items():
             if value:

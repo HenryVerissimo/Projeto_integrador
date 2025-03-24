@@ -5,10 +5,10 @@ from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 
 class UsersRepository:
     def __init__(self, connection: ConnectionInterfaceDB) -> None:
-        self.__connection_db = connection()
+        self.__connection_db = connection
 
 
-    def insert(self, name:str, email:str, password:str, admin:bool = False, admin_level: int = 0) -> None:
+    def insert(self, name:str, email:str, password:str, admin:bool = False, admin_level: int = 0) -> bool:
         with self.__connection_db as connection:
             try:
                 new_user = Users(user_name=name, user_email=email, user_password=password, user_admin=admin, user_admin_level= admin_level)
@@ -31,7 +31,7 @@ class UsersRepository:
             raise f"Erro ao tentar procurar registros no banco: {error}"
             
 
-    def select_one(self,id:int) -> object[Users]:
+    def select_one(self,id:int) -> Users:
         try:
             with self.__connection_db as connection:
                 query = connection.session.query(Users).filter(Users.user_id == id).first()
@@ -41,7 +41,7 @@ class UsersRepository:
             raise f"Erro ao tentar procurar o registro no banco: {error}"
      
 
-    def update(self, id:int, name:str = None, email:str = None, password:int = None, admin:bool = None, admin_level:int = 0) -> None:
+    def update(self, id:int, name:str = None, email:str = None, password:int = None, admin:bool = None, admin_level:int = 0) -> bool:
         parameters = {"user_name": name, "user_email": email, "user_password": password, "user_admin": admin, "user_admin_level": admin_level}
 
         for key, value in parameters.items():
@@ -64,7 +64,7 @@ class UsersRepository:
             raise f"Erro ao tentar atualizar o registro no banco: {error}"
 
 
-    def delete(self, id:int) -> None:
+    def delete(self, id:int) -> bool:
         try:
             with self.__connection_db as connection:
                 query = connection.session.query(Users).filter(Users.user_id == id).first()

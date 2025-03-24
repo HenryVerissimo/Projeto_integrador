@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 class ConnectionInterfaceDB(ABC):
  
     @abstractmethod
-    def __create_engine(self):
+    def _create_engine(self):
         pass
 
     @abstractmethod
@@ -24,11 +24,11 @@ class ConnectionInterfaceDB(ABC):
 
 class ConnectionMysqlDB(ConnectionInterfaceDB):
     def __init__(self):
-        self.__engine_string = "mysql+pymysql://User:Senha123@localhost:3306/LocacaoJogos" #Trocar para o ip do servidor local no dia da apresentação
-        self.__engine = self.__create_engine()
+        self.__engine_string = "mysql+pymysql://User:Password123@192.168.120.154:3306/GameRental" #Trocar para o ip do servidor local no dia da apresentação
+        self.__engine = self._create_engine()
         self.session = None
 
-    def __create_engine(self):
+    def _create_engine(self):
         return create_engine(self.__engine_string)
     
     def get_engine(self):

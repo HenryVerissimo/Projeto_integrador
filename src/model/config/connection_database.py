@@ -1,7 +1,28 @@
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
+from abc import ABC, abstractmethod
 
-class ConnectionDataBase:
+
+class ConnectionInterfaceDB(ABC):
+ 
+    @abstractmethod
+    def __create_engine(self):
+        pass
+
+    @abstractmethod
+    def get_engine(self):
+        pass
+
+    @abstractmethod
+    def __enter__(self):
+        pass
+
+    @abstractmethod
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        pass
+
+
+class ConnectionMysqlDB(ConnectionInterfaceDB):
     def __init__(self):
         self.__engine_string = "mysql+pymysql://User:Senha123@localhost:3306/LocacaoJogos" #Trocar para o ip do servidor local no dia da apresentação
         self.__engine = self.__create_engine()

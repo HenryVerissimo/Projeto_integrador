@@ -1,6 +1,6 @@
 from src.model import ConnectionInterfaceDB
 from src.model import Users
-from sqlalchemy.exc import DataError
+from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 
 
 class UsersRepository:
@@ -14,74 +14,31 @@ class UsersRepository:
                 new_user = Users(user_name=name, user_email=email, user_password=password, user_admin=admin, user_admin_level= admin_level)
                 connection.session.add(new_user)
                 connection.session.commit()
-                response = {
-                    "status" : "success",
-                    "message" : "Registro criado com sucesso."
-                }
-                return response
-
+                return True
+            
             except Exception as error:
                 connection.session.rollback()
-                response = {
-                    "status" : "error",
-                    "message" : f"Erro ao tentar inserir registro no banco: {error}"
-                }
-                return response
+                raise f"Erro ao tentar inserir registro no banco: {error}"
 
 
     def select(self) -> list:
         try:
             with self.__connection_db as connection:
                 query = connection.session.query(Users).all()
-
-                if query:
-                    response = {
-                        "status" : "success",
-                        "message" : "Registro(s) selecionado(s) com sucesso.",
-                        "data": query
-                    }
-                    return response
-                
-                response = {
-                    "status" : "error",
-                    "message" : "Nenhum registro foi encontrado!",
-                    "data": query
-                }
-                return response
+                return query
         
         except ValueError as error:
-            response = {
-                "status" : "error",
-                "message" : f"Erro ao tentar procurar registros no banco: {error}"
-            }
-            return response
+            raise f"Erro ao tentar procurar registros no banco: {error}"
             
 
     def select_one(self,id:int) -> object[Users]:
         try:
             with self.__connection_db as connection:
                 query = connection.session.query(Users).filter(Users.user_id == id).first()
-
-                if query:
-                    response = {
-                        "status" : "success",
-                        "message" : "Registro foi selecionado com sucesso.",
-                        "data": query
-                    }
-                    return response
-                
-                response = {
-                    "status" : error,
-                    "message" : "Nunhum registro foi encontrado."
-                }
-                return response
+                return query
             
         except Exception as error:
-            response = {
-                "status" : "error",
-                "message" : f"Erro ao tentar procurar registro no banco: {error}"
-            }
-            return response
+            raise f"Erro ao tentar procurar o registro no banco: {error}"
      
 
     def update(self, id:int, name:str = None, email:str = None, password:int = None, admin:bool = None, admin_level:int = 0) -> None:
@@ -93,21 +50,18 @@ class UsersRepository:
         
         try:
             with self.__connection_db as connection:
+                query = connection.session.query(Users).filter(Users.user_id == id).first()
+
+                if not query:
+                    raise NoResultFound("Nenhum registro foi encontrado com o id informado.")
+                
                 connection.session.query(Users).filter(Users.user_id == id).update(parameters)
                 connection.session.commit()
-                response = {
-                    "status" : "success",
-                    "message": "Registro atualizado com sucesso."
-                }
-                return response
+                return True
 
         except Exception as error:
             connection.session.rollback()
-            response = {
-                "status" : "error",
-                "message" : "Erro ao tentar atualizar registro no banco"
-            }
-            return response
+            raise f"Erro ao tentar atualizar o registro no banco: {error}"
 
 
     def delete(self, id:int) -> None:
@@ -115,25 +69,13 @@ class UsersRepository:
             with self.__connection_db as connection:
                 query = connection.session.query(Users).filter(Users.user_id == id).first()
 
-                if query:
-                    connection.session.query(Users).filter(Users.user_id == id).delete()
-                    connection.session.commit()
-                    response = {
-                        "status" : "success",
-                        "message": "Registro deletado com sucesso."
-                    }
-                    return response
-                
-                response = {
-                    "status" : "error",
-                    "message": "Nenhum registro foi encontrado."
-                }
-                return response
+                if not query:
+                    raise NoResultFound("Nenhum registro foi encontrado com o id informado.")
+
+                connection.session.query(Users).filter(Users.user_id == id).delete()
+                connection.session.commit()
+                return True
 
         except Exception as error:
             connection.session.rollback()
-            response = {
-                "status": "error",
-                "message": f"Erro ao tentar deletar registro no banco: {error}"
-            }
-            return response
+            raise f"Erro ao tentar deletar o registro no banco: {error}"

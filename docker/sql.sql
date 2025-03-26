@@ -1,4 +1,4 @@
-USE GameRental;
+USE LocacaoJogos;
 
 CREATE TABLE games (
     game_id INT AUTO_INCREMENT PRIMARY KEY,

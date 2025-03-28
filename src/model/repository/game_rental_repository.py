@@ -1,6 +1,4 @@
-from src.model import ConnectionMysqlDB
 from src.model import GameRental, Games
-from sqlalchemy.orm.exc import NoResultFound
 
 
 class GameRentalRepository:

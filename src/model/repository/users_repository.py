@@ -1,6 +1,5 @@
 from src.model import ConnectionInterfaceDB
 from src.model import Users
-from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 
 
 class UsersRepository:
@@ -18,11 +17,7 @@ class UsersRepository:
             
             except Exception as error:
                 connection.session.rollback()
-<<<<<<< HEAD
-                raise f"Erro ao tentar inserir registro no banco"
-=======
                 return None
->>>>>>> origin/main
 
 
     def select(self) -> list:
@@ -32,13 +27,9 @@ class UsersRepository:
                 return query
         
         except ValueError as error:
-<<<<<<< HEAD
-            raise f"Erro ao tentar procurar registros no banco"
-=======
             return None
->>>>>>> origin/main
-            
 
+            
     def select_one(self,id:int) -> Users:
         try:
             with self.__connection_db as connection:
@@ -46,11 +37,7 @@ class UsersRepository:
                 return query
             
         except Exception as error:
-<<<<<<< HEAD
-            raise f"Erro ao tentar procurar o registro no banco"
-=======
             return None
->>>>>>> origin/main
      
 
     def update(self, id:int, name:str = None, email:str = None, password:int = None, admin:bool = None) -> bool | None:
@@ -73,11 +60,7 @@ class UsersRepository:
 
         except Exception as error:
             connection.session.rollback()
-<<<<<<< HEAD
-            raise f"Erro ao tentar atualizar o registro no banco"
-=======
             raise None
->>>>>>> origin/main
 
 
     def delete(self, id:int) -> bool:
@@ -94,8 +77,4 @@ class UsersRepository:
 
         except Exception as error:
             connection.session.rollback()
-<<<<<<< HEAD
-            raise f"Erro ao tentar deletar o registro no banco"
-=======
             raise None
->>>>>>> origin/main

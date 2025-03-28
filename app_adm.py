@@ -1,6 +1,7 @@
 import flet as ft
 from flet import ControlEvent, Page
-from controllers import C
+
+from src.ADM.controllers import CreateUserController
 
 
 def main(page: Page):
@@ -183,4 +184,4 @@ def main(page: Page):
 
 if __name__ == "__main__":
 
-    app = ft.app(target=main, assets_dir="assets")
+    app = ft.app(target=main, assets_dir="src/ADM/assets")

@@ -1,4 +1,3 @@
-from sqlalchemy.orm.exc import NoResultFound
 from src.model import ConnectionInterfaceDB
 from src.model import Games
 

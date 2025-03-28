@@ -1,10 +1,5 @@
-import sys
 
-sys.path.append(r"/src/model/repository/users_repository.py")
 from src.model.repository import UsersRepository
-
-import UsersRepository
-
 
 class CreateUserController:
 

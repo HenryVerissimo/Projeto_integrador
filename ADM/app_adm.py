@@ -1,5 +1,6 @@
 import flet as ft
 from flet import ControlEvent, Page
+from controllers import C
 
 
 def main(page: Page):
@@ -9,9 +10,10 @@ def main(page: Page):
     page.bgcolor = "#160321"
     page.window.width = 1000
     page.window.height = 700
-    page.window.min_width = 600
-    page.window.min_height = 600
+    page.window.min_width = 200
+    page.window.min_height = 200
     page.scroll = ft.ScrollMode.AUTO
+    page.theme_mode = ft.ThemeMode.DARK
     page.fonts = {
         "LilitaOne-Regular": "/fonts/LilitaOne-Regular.ttf"
     }
@@ -20,16 +22,24 @@ def main(page: Page):
     ### FUNÇÕES DE CONTROLE DE PÁGINAS ###
     def login_user_click(e: ControlEvent):
 
-        query = textemail.value
-
+        #fazer query
         page.controls.clear()
         page.add(home_view)
         page.update()
 
     def create_user_click(e: ControlEvent):
+        new_user = CreateUserController().create_user(create_name, create_email, create_password, confirm_password)
 
-        pass
-
+        if new_user["status"] == "error":
+            create_error_text.value = new_user["message"]
+            page.update()
+            return None
+        
+        page.controls.clear()
+        page.controls.add(home_view)
+        page.update()
+        
+        
     def go_to_create_click(e: ControlEvent):
         
         page.controls.clear()
@@ -144,7 +154,8 @@ def main(page: Page):
                         ft.Container(
                             content=ft.Column(
                                 controls=[
-                                    ft.TextButton(text="Voltar para o login", style=ft.ButtonStyle(color=ft.Colors.PURPLE_100), on_click=go_to_login_click)
+                                    ft.TextButton(text="Voltar para o login", style=ft.ButtonStyle(color=ft.Colors.PURPLE_100), on_click=go_to_login_click),
+                                    create_error_text := ft.Text(value="", visible=False)
                                 ]
                             )
                         )                        
@@ -168,6 +179,7 @@ def main(page: Page):
     ### CONFIGURA A PÁGINA INICIAL PADRÃO ###
     page.add(create_account_view)
     page.update()  
+
 
 if __name__ == "__main__":
 

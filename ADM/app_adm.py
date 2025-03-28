@@ -66,8 +66,8 @@ def main(page: Page):
                         ft.Container(
                             content=ft.Image(
                                 src="images/logo_projeto.png",
-                                width=250,
-                                height=250
+                                width=200,
+                                height=200
                             )
                         ),
                         ft.Container(
@@ -115,8 +115,8 @@ def main(page: Page):
                         ft.Container(
                             content=ft.Image(
                                 src="images/user.png",
-                                width=200,
-                                height=200
+                                width=150,
+                                height=150
                             )
                         ),
                         ft.Container(

@@ -16,7 +16,7 @@ class GamesRepository:
             
             except Exception as error:
                 connection.session.rollback()
-                raise f"Erro ao tentar inserir registro ao banco: {error}"
+                raise f"Erro ao tentar inserir registro ao banco"
 
     
     def select(self) -> list:
@@ -30,7 +30,7 @@ class GamesRepository:
                 return query
             
             except Exception as error:
-                raise f"Erro ao tentar procurar registros no banco: {error}"
+                raise f"Erro ao tentar procurar registros no banco"
         
     
     def select_one(self, id:int) -> Games:
@@ -44,7 +44,7 @@ class GamesRepository:
                 return query
             
             except Exception as error:
-                raise f"Erro ao tentar procurar o registro no banco: {error}" 
+                raise f"Erro ao tentar procurar o registro no banco" 
 
     
     def update(self, id: int, name:str = None, quantity:int = None, price:float = None, genre:str = None, description:str = None) -> bool:
@@ -62,7 +62,7 @@ class GamesRepository:
 
             except Exception as error:
                 connection.session.rollback()
-                raise f"Erro ao tentar atualizar registro no banco: {error}"
+                raise f"Erro ao tentar atualizar registro no banco"
         
 
     def delete(self, id:int) -> bool:
@@ -79,4 +79,4 @@ class GamesRepository:
             
             except Exception as error:
                 connection.session.rollback()
-                raise f"Erro ao tentar deletar registro do banco: {error}"
+                raise f"Erro ao tentar deletar registro do banco"

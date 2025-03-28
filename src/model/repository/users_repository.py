@@ -18,7 +18,7 @@ class UsersRepository:
             
             except Exception as error:
                 connection.session.rollback()
-                raise f"Erro ao tentar inserir registro no banco: {error}"
+                raise f"Erro ao tentar inserir registro no banco"
 
 
     def select(self) -> list:
@@ -28,7 +28,7 @@ class UsersRepository:
                 return query
         
         except ValueError as error:
-            raise f"Erro ao tentar procurar registros no banco: {error}"
+            raise f"Erro ao tentar procurar registros no banco"
             
 
     def select_one(self,id:int) -> Users:
@@ -38,7 +38,7 @@ class UsersRepository:
                 return query
             
         except Exception as error:
-            raise f"Erro ao tentar procurar o registro no banco: {error}"
+            raise f"Erro ao tentar procurar o registro no banco"
      
 
     def update(self, id:int, name:str = None, email:str = None, password:int = None, admin:bool = None, admin_level:int = 0) -> bool:
@@ -61,7 +61,7 @@ class UsersRepository:
 
         except Exception as error:
             connection.session.rollback()
-            raise f"Erro ao tentar atualizar o registro no banco: {error}"
+            raise f"Erro ao tentar atualizar o registro no banco"
 
 
     def delete(self, id:int) -> bool:
@@ -78,4 +78,4 @@ class UsersRepository:
 
         except Exception as error:
             connection.session.rollback()
-            raise f"Erro ao tentar deletar o registro no banco: {error}"
+            raise f"Erro ao tentar deletar o registro no banco"

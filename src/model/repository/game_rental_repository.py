@@ -1,6 +1,6 @@
 from src.model import ConnectionMysqlDB
 from src.model import GameRental, Games
-from sqlalchemy.orm.exc import NoResultFound 
+from sqlalchemy.orm.exc import NoResultFound
 
 
 class GameRentalRepository:
@@ -17,7 +17,7 @@ class GameRentalRepository:
             
         except Exception as error:
             connection.session.rollback()
-            raise f"Erro ao tentar inserir registro ao banco: {error}"
+            return f"Erro ao tentar inserir registro ao banco"
 
     def select(self) -> list:
         try:
@@ -30,7 +30,7 @@ class GameRentalRepository:
                 return query
             
         except Exception as error:
-            raise f"Erro ao tentar procurar o registro no banco: {error}"
+            return f"Erro ao tentar procurar o registro no banco"
  
 
     def update(self, id: int, user_id=None, game_id=None, game_rental_date=None, game_return_date=None) -> bool:
@@ -48,7 +48,7 @@ class GameRentalRepository:
 
             except Exception as error:
                 connection.session.rollback()
-                raise f"Erro ao tentar atualizar registro no banco: {error}"
+                return f"Erro ao tentar atualizar registro no banco"
             
     
     def delete(self, id:int) -> bool:
@@ -65,5 +65,5 @@ class GameRentalRepository:
 
             except Exception as error:
                 connection.session.rollback()
-                raise f"Erro ao tentar deletar registro no banco: {error}"
+                return f"Erro ao tentar deletar registro no banco"
 

@@ -14,9 +14,9 @@ class GamesRepository:
                 connection.session.commit()
                 return True
             
-            except Exception as error:
+            except Exception as e:
                 connection.session.rollback()
-                raise f"Erro ao tentar inserir registro ao banco: {error}"
+                return None
 
     
     def select(self) -> list:
@@ -25,12 +25,12 @@ class GamesRepository:
                 query = connection.session.query(Games).all()
 
                 if not query:
-                    raise NoResultFound("Nenhum registro foi encontrado.")
+                    return False
                 
                 return query
             
-            except Exception as error:
-                raise f"Erro ao tentar procurar registros no banco: {error}"
+            except Exception as e:
+                return None
         
     
     def select_one(self, id:int) -> Games:
@@ -39,12 +39,12 @@ class GamesRepository:
                 query = connection.session.query(Games).filter(Games.game_id == id).first()
 
                 if not query:
-                    raise NoResultFound("Nenhum registro foi encontrado com esse id")
+                    return False
                 
                 return query
             
             except Exception as error:
-                raise f"Erro ao tentar procurar o registro no banco: {error}" 
+                return None
 
     
     def update(self, id: int, name:str = None, quantity:int = None, price:float = None, genre:str = None, description:str = None) -> bool:
@@ -62,7 +62,7 @@ class GamesRepository:
 
             except Exception as error:
                 connection.session.rollback()
-                raise f"Erro ao tentar atualizar registro no banco: {error}"
+                return None
         
 
     def delete(self, id:int) -> bool:
@@ -79,4 +79,4 @@ class GamesRepository:
             
             except Exception as error:
                 connection.session.rollback()
-                raise f"Erro ao tentar deletar registro do banco: {error}"
+                return None

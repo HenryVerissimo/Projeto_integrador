@@ -8,17 +8,17 @@ class UsersRepository:
         self.__connection_db = connection
 
 
-    def insert(self, name:str, email:str, password:str, admin:bool = False, admin_level: int = 0) -> bool:
+    def insert(self, name:str, email:str, password:str, admin:bool = False) -> bool:
         with self.__connection_db as connection:
             try:
-                new_user = Users(user_name=name, user_email=email, user_password=password, user_admin=admin, user_admin_level= admin_level)
+                new_user = Users(user_name=name, user_email=email, user_password=password, user_admin=admin)
                 connection.session.add(new_user)
                 connection.session.commit()
-                return True
+                return new_user
             
             except Exception as error:
                 connection.session.rollback()
-                raise f"Erro ao tentar inserir registro no banco: {error}"
+                return None
 
 
     def select(self) -> list:
@@ -28,7 +28,7 @@ class UsersRepository:
                 return query
         
         except ValueError as error:
-            raise f"Erro ao tentar procurar registros no banco: {error}"
+            return None
             
 
     def select_one(self,id:int) -> Users:
@@ -38,11 +38,11 @@ class UsersRepository:
                 return query
             
         except Exception as error:
-            raise f"Erro ao tentar procurar o registro no banco: {error}"
+            return None
      
 
-    def update(self, id:int, name:str = None, email:str = None, password:int = None, admin:bool = None, admin_level:int = 0) -> bool:
-        parameters = {"user_name": name, "user_email": email, "user_password": password, "user_admin": admin, "user_admin_level": admin_level}
+    def update(self, id:int, name:str = None, email:str = None, password:int = None, admin:bool = None) -> bool | None:
+        parameters = {"user_name": name, "user_email": email, "user_password": password, "user_admin": admin}
 
         for key, value in parameters.items():
             if value:
@@ -50,10 +50,10 @@ class UsersRepository:
         
         try:
             with self.__connection_db as connection:
-                query = connection.session.query(Users).filter(Users.user_id == id).first()
+                user = connection.session.query(Users).filter(Users.user_id == id).first()
 
-                if not query:
-                    raise NoResultFound("Nenhum registro foi encontrado com o id informado.")
+                if not user:
+                    return False
                 
                 connection.session.query(Users).filter(Users.user_id == id).update(parameters)
                 connection.session.commit()
@@ -61,16 +61,16 @@ class UsersRepository:
 
         except Exception as error:
             connection.session.rollback()
-            raise f"Erro ao tentar atualizar o registro no banco: {error}"
+            raise None
 
 
     def delete(self, id:int) -> bool:
         try:
             with self.__connection_db as connection:
-                query = connection.session.query(Users).filter(Users.user_id == id).first()
+                user = connection.session.query(Users).filter(Users.user_id == id).first()
 
-                if not query:
-                    raise NoResultFound("Nenhum registro foi encontrado com o id informado.")
+                if not user:
+                    return False
 
                 connection.session.query(Users).filter(Users.user_id == id).delete()
                 connection.session.commit()
@@ -78,4 +78,4 @@ class UsersRepository:
 
         except Exception as error:
             connection.session.rollback()
-            raise f"Erro ao tentar deletar o registro no banco: {error}"
+            raise None

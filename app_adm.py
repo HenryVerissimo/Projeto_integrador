@@ -7,6 +7,7 @@ from src.ADM.controllers import CreateUserController
 def main(page: Page):
     
     ### CONFIGURAÇÕES DE PÁGINA ###
+
     page.title = "App ADM - GameOver"
     page.bgcolor = "#160321"
     page.window.width = 1000
@@ -21,6 +22,7 @@ def main(page: Page):
 
 
     ### FUNÇÕES DE CONTROLE DE PÁGINAS ###
+
     def login_user_click(e: ControlEvent):
 
         #fazer query
@@ -29,21 +31,24 @@ def main(page: Page):
         page.update()
 
     def create_user_click(e: ControlEvent):
-        new_user = CreateUserController().create_user(create_name, create_email, create_password, confirm_password)
+        new_user = CreateUserController().create_user(create_account_widgets["create_name"].value, create_account_widgets["create_email"].value,
+                                                       create_account_widgets["create_password"].value, create_account_widgets["confirm_password"].value)
 
         if new_user["status"] == "error":
-            create_error_text.value = new_user["message"]
+            create_account_widgets["text_error"].value = new_user["message"]
+            create_account_widgets["text_error"].visible = True
             page.update()
             return None
         
         page.controls.clear()
-        page.controls.add(home_view)
+        page.add(home_view)
         page.update()
         
         
     def go_to_create_click(e: ControlEvent):
         
         page.controls.clear()
+        create_account_widgets["text_error"].visible = False
         page.add(create_account_view)
         page.update()
 
@@ -60,7 +65,29 @@ def main(page: Page):
         page.update()
 
 
-    ### FUNÇÕES DE TRATAMENTO DE DADOS ###
+
+    ### WIDGETS DO APLICATIVO ###
+
+    login_widgets = {
+        "logo_project": ft.Image(src="images/logo_projeto.png", width=200, height=200),
+        "text_login": ft.Text(value="LOGIN DE USUÁRIO", size=30, text_align=ft.TextAlign.CENTER, style=ft.TextStyle(font_family="LilitaOne-Regular", color=ft.Colors.PURPLE_300)),
+        "user_email": ft.TextField(label="Email", width=300, border_color=ft.Colors.PURPLE_200),
+        "user_password": ft.TextField(label="Senha", width=300, password=True, border_color=ft.Colors.PURPLE_200),
+        "button_login": ft.Button(text="ENTRAR NA CONTA", width=300, on_click=login_user_click, color=ft.Colors.PURPLE_900, bgcolor=ft.Colors.PURPLE_200),
+        "button_create_account": ft.TextButton(text="Criar uma nova conta", style=ft.ButtonStyle(color=ft.Colors.PURPLE_100), on_click=go_to_create_click)
+    }
+    create_account_widgets = {
+        "user_icon": ft.Image(src="images/user.png", width=150, height=150),
+        "text_create_account": ft.Text( value="CRIAR UMA CONTA", size=30, text_align=ft.TextAlign.CENTER, style=ft.TextStyle(font_family="LilitaOne-Regular", color=ft.Colors.PURPLE_300)),
+        "create_name": ft.TextField(label="Nome", width=300, border_color=ft.Colors.PURPLE_200,),
+        "create_email": ft.TextField(label="Email", width=300, border_color=ft.Colors.PURPLE_200,),
+        "create_password": ft.TextField(label="Senha", width=300, password=True, border_color=ft.Colors.PURPLE_200),
+        "confirm_password": ft.TextField(label="Confirmar senha", width=300, password=True, border_color=ft.Colors.PURPLE_200),
+        "button_create_account": ft.Button(text="CRIAR UMA CONTA", width=300, on_click=create_user_click, color=ft.Colors.PURPLE_900, bgcolor=ft.Colors.PURPLE_200),
+        "button_back": ft.TextButton(text="Voltar para o login", style=ft.ButtonStyle(color=ft.Colors.PURPLE_100), on_click=go_to_login_click),
+        "text_error": ft.Text(value="", visible=False, text_align=ft.TextAlign.CENTER)
+
+    }
 
 
     ### PÁGINAS DO APLICATIVO ###
@@ -75,36 +102,26 @@ def main(page: Page):
                     horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                     controls=[
                         ft.Container(
-                            content=ft.Image(
-                                src="images/logo_projeto.png",
-                                width=200,
-                                height=200
-                            )
+                            content=login_widgets["logo_project"]
                         ),
                         ft.Container(
                             padding=ft.padding.only(left= 10, right=10, top=0, bottom=30),
-                            content=ft.Text(
-                                value="LOGIN DE USUÁRIO",
-                                size=30,
-                                text_align=ft.TextAlign.CENTER,
-                                style=ft.TextStyle(font_family="LilitaOne-Regular", color=ft.Colors.PURPLE_300),
-                            )
+                            content=login_widgets["text_login"]
                         ),
                         ft.Container(
-                            bgcolor="",
                             padding=ft.padding.only(left=50, right=50, top=10, bottom=10),
                             content=ft.Column(
                                 controls=[
-                                    user_email := ft.TextField(label="Email", width=300, border_color=ft.Colors.PURPLE_200,),
-                                    user_password := ft.TextField(label="Senha", width=300, password=True, border_color=ft.Colors.PURPLE_200),
-                                    ft.Button(text="ENTRAR NA CONTA", width=300, on_click=login_user_click, color=ft.Colors.PURPLE_900, bgcolor=ft.Colors.PURPLE_200),
+                                    login_widgets["user_email"],
+                                    login_widgets["user_password"],
+                                    login_widgets["button_login"]
                                 ]
                             )
                         ),
                         ft.Container(
                             content=ft.Column(
-                                controls=[
-                                    ft.TextButton(text="Criar uma nova conta", style=ft.ButtonStyle(color=ft.Colors.PURPLE_100), on_click=go_to_create_click)
+                                controls=[ login_widgets["button_create_account"]
+                                    
                                 ]
                             )
                         )                        
@@ -124,39 +141,32 @@ def main(page: Page):
                     horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                     controls=[
                         ft.Container(
-                            content=ft.Image(
-                                src="images/user.png",
-                                width=150,
-                                height=150
-                            )
+                            content= create_account_widgets["user_icon"]
                         ),
                         ft.Container(
                             padding=ft.padding.only(left= 10, right=10, top=0, bottom=30),
-                            content=ft.Text(
-                                value="CRIAR UMA CONTA",
-                                size=30,
-                                text_align=ft.TextAlign.CENTER,
-                                style=ft.TextStyle(font_family="LilitaOne-Regular", color=ft.Colors.PURPLE_300),
-                            )
+                            content=create_account_widgets["text_create_account"]
                         ),
                         ft.Container(
-                            bgcolor="",
                             padding=ft.padding.only(left=50, right=50, top=10, bottom=10),
                             content=ft.Column(
                                 controls=[
-                                    create_name := ft.TextField(label="Nome", width=300, border_color=ft.Colors.PURPLE_200,),
-                                    create_email := ft.TextField(label="Email", width=300, border_color=ft.Colors.PURPLE_200,),
-                                    create_password := ft.TextField(label="Senha", width=300, password=True, border_color=ft.Colors.PURPLE_200),
-                                    confirm_password  := ft.TextField(label="Confirmar senha", width=300, password=True, border_color=ft.Colors.PURPLE_200),
-                                    ft.Button(text="CRIAR UMA CONTA", width=300, on_click=login_user_click, color=ft.Colors.PURPLE_900, bgcolor=ft.Colors.PURPLE_200),
+                                    create_account_widgets["create_name"],
+                                    create_account_widgets["create_email"],
+                                    create_account_widgets["create_password"],
+                                    create_account_widgets["confirm_password"],
+                                    create_account_widgets["button_create_account"],                    
+                                    
                                 ]
                             )
                         ),
                         ft.Container(
                             content=ft.Column(
+                                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                                 controls=[
-                                    ft.TextButton(text="Voltar para o login", style=ft.ButtonStyle(color=ft.Colors.PURPLE_100), on_click=go_to_login_click),
-                                    create_error_text := ft.Text(value="", visible=False)
+                                    create_account_widgets["button_back"],
+                                    create_account_widgets["text_error"]
+                                    
                                 ]
                             )
                         )                        
@@ -178,6 +188,7 @@ def main(page: Page):
             
 
     ### CONFIGURA A PÁGINA INICIAL PADRÃO ###
+
     page.add(create_account_view)
     page.update()  
 

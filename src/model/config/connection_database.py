@@ -24,7 +24,7 @@ class ConnectionInterfaceDB(ABC):
 
 class ConnectionMysqlDB(ConnectionInterfaceDB):
     def __init__(self):
-        self.__engine_string = "mysql+pymysql://User:Password123@192.168.120.154:3306/GameRental" #Trocar para o ip do servidor local no dia da apresentação
+        self.__engine_string = "mysql+pymysql://Henry:senha1234@localhost:3306/LocacaoJogos" #Trocar para o ip do servidor local no dia da apresentação
         self.__engine = self._create_engine()
         self.session = None
 

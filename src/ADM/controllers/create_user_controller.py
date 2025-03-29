@@ -1,30 +1,61 @@
-
 from src.model.repository import UsersRepository
+from src.model.config import ConnectionMysqlDB
 
 class CreateUserController:
 
-    def create_user(name: str, email: str, password: str, confirm: str) -> None:
+    def create_user(self, name: str, email: str, password: str, confirm_password: str) -> None:
 
-        if len(password) < 5 and len(password) > 20:
-            response = {"status": "error", "message": "The password must be at least 5 characters and no more than 20 characters long"}
-        
-        elif password != confirm:
-            response = {"status": "error", "message": "Password and password confirmation are different"}
+        if not self.validate_email(email):
+            response = {"status": "error", "message": "O formato do email é inválido!"}
 
-        elif email.count("@") != 1:
-            response = {"status": "error", "message": "The format for email is invalid"}
+        elif not self.validate_password(password):
+            response = {"status": "error", "message": "A senha precisa ter entre 5 e 20 caracteres!"}
+
+        elif not self.validate_confirm_password(password, confirm_password):
+            response = {"status": "error", "message": "As senhas precisam ser iguais!"}
+
         
-        elif len(name) < 5:
-            response = {"status": "error", "message": "The name must be at least 5 characters long"}
+        elif not self.validate_name(name):
+            response = {"status": "error", "message": "O nome de usuário precisa ter entre 5 e 100 caracteres!"}
         
         else:
 
-            request = UsersRepository().insert(name=name, email=email, password=password, admin=True)
+            request = UsersRepository(ConnectionMysqlDB()).insert(name=name, email=email, password=password, admin=True)
 
             if not request:
-                response = {"status": "error", "message": "Error trying to register user" }
+                response = {"status": "error", "message": "Erro ao tentar registrar usuário!" }
             
             else: 
-                response = {"status": "success", "message": "Successfully registered"}
+                response = {"status": "success", "message": "Registro feito com sucesso"}
 
         return response
+    
+    def validate_email(self, email: str) -> bool:
+
+        if email.count("@") != 1 or email.count(".") < 1:
+            return False
+        
+        return True
+        
+
+    def validate_password(self, password:str) -> bool:
+
+        if len(password) < 5 or len(password) > 20:
+            return False
+        
+
+        return True
+    
+    def validate_confirm_password(self, password: str, confirm_password: str) -> bool:
+        
+        if password != confirm_password:
+            return False
+        
+        return True
+    
+    def validate_name(self, name: str) -> bool:
+
+        if len(name) < 5 or len(name) > 100:
+            return False  
+        
+        return True

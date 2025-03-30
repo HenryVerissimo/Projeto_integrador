@@ -15,7 +15,6 @@ CREATE TABLE users (
     user_email VARCHAR(100) NOT NULL,
     user_password VARCHAR(20) NOT NULL,
     user_admin BOOLEAN DEFAULT FALSE,
-    user_admin_level INT DEFAULT 0,
     user_status BOOLEAN DEFAULT TRUE
 );
 

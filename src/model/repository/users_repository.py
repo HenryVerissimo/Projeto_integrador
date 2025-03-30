@@ -23,20 +23,37 @@ class UsersRepository:
     def select(self) -> list:
         try:
             with self.__connection_db as connection:
-                query = connection.session.query(Users).all()
-                return query
+                response = connection.session.query(Users).all()
+
+                if not response:
+                    return False
+                
+                return response
         
         except ValueError as error:
             return None
 
             
-    def select_one(self,id:int) -> Users:
+    def select_one_by_id(self,id:int) -> Users:
         try:
             with self.__connection_db as connection:
-                query = connection.session.query(Users).filter(Users.user_id == id).first()
-                return query
+                response = connection.session.query(Users).filter(Users.user_id == id).first()
+                return response
             
         except Exception as error:
+            return None
+        
+    def select_by_email(self, email:str) -> Users:
+        try:
+            with self.__connection_db as connection:
+                response = connection.session.query(Users).filter(Users.user_email == email).first()
+                
+                if not response:
+                    return False
+                
+                return response
+            
+        except Exception as e:
             return None
      
 
@@ -66,12 +83,12 @@ class UsersRepository:
     def delete(self, id:int) -> bool:
         try:
             with self.__connection_db as connection:
-                user = connection.session.query(Users).filter(Users.user_id == id).first()
+                request = connection.session.query(Users).filter(Users.user_id == id).first()
 
-                if not user:
+                if not request:
                     return False
 
-                connection.session.query(Users).filter(Users.user_id == id).delete()
+                connection.session.delete(request)
                 connection.session.commit()
                 return True
 

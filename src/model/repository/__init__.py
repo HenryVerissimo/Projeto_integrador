@@ -1,1 +1,3 @@
 from .users_repository import UsersRepository
+from .games_repository import GamesRepository
+from .game_rental_repository import GameRentalRepository

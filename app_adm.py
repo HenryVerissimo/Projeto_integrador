@@ -1,7 +1,7 @@
 import flet as ft
 from flet import ControlEvent, Page
 
-from src.ADM.controllers import CreateUserController, LoginAccountController
+from src.ADM.controllers import CreateUserController, LoginAccountController, SelectController
 
 
 def main(page: Page):
@@ -10,19 +10,49 @@ def main(page: Page):
 
     page.title = "App ADM - GameOver"
     page.bgcolor = "#160f1c"
-    page.window.width = 1000
-    page.window.height = 700
-    page.window.min_width = 600
-    page.window.min_height = 600
+    page.window.min_width = 1000
+    page.window.min_height = 900
     page.padding = 0
     page.scroll = ft.ScrollMode.AUTO
     page.theme_mode = ft.ThemeMode.DARK
     page.fonts = {
-        "LilitaOne-Regular": "/fonts/LilitaOne-Regular.ttf"
+        "LilitaOne-Regular": "src/ADM/assets/fonts/LilitaOne-Regular.ttf"
     }
 
 
-    ### FUNÇÕES DE CONTROLE DE PÁGINAS ###
+    ### FUNÇÕES DE TROCA DE PÁGINAS ###
+
+    def go_to_create_click(e: ControlEvent):
+        
+        page.controls.clear()
+        create_account_widgets["text_error"].visible = False
+        create_account_widgets["create_name"].value = ""
+        create_account_widgets["create_email"].value = ""
+        create_account_widgets["create_password"].value = ""
+        create_account_widgets["confirm_password"].value = ""
+        page.add(create_account_view)
+        page.update()
+
+    def go_to_login_click(e: ControlEvent):
+
+        page.controls.clear()
+        login_widgets["text_error"].visible = False
+        login_widgets["user_email"].value = ""
+        login_widgets["user_password"].value = ""
+        page.add(login_view)
+        page.update()
+
+    def go_to_select_click(e: ControlEvent):
+
+        page.controls.clear()
+        select_widgets["text_error"].value = ""
+        select_widgets["text_error"].visible = False
+        select_results.content = select_widgets["text_no_results"]
+        page.add(select_view)
+        page.update()
+
+
+    ### FUNÇÕES DE CHECAGEM DE DADOS ###
 
     def login_user_click(e: ControlEvent):
         login = LoginAccountController().login_account(login_widgets["user_email"].value, login_widgets["user_password"].value)
@@ -34,9 +64,13 @@ def main(page: Page):
             return None
         
         page.controls.clear()
-        page.add(home_bar)
+        select_widgets["text_error"].value = ""
+        select_widgets["text_error"].visible = False
+        select_results.content = select_widgets["text_no_results"]
+        page.add(select_view)
         page.update()
-
+        
+        
     def create_user_click(e: ControlEvent):
         new_user = CreateUserController().create_user(create_account_widgets["create_name"].value, create_account_widgets["create_email"].value,
                                                        create_account_widgets["create_password"].value, create_account_widgets["confirm_password"].value)
@@ -48,32 +82,63 @@ def main(page: Page):
             return None
         
         page.controls.clear()
-        page.add(home_bar)
+        select_widgets["text_error"].value = ""
+        select_widgets["text_error"].visible = False
+        select_results.content = select_widgets["text_no_results"]
+        page.add(select_view)
         page.update()
         
+
+    ### FUNÇÕES DE SELEÇÃO DE DADOS ###
+
+    def select_results_click(e: ControlEvent, table:str="Usuários", column:str=None, filter:str=None):
+
+
+        if table == "Usuários":
+
+            request = SelectController().select_all_users()
+
+            if request["status"] == "error":
+                select_widgets["text_error"].value = request["message"]
+                select_widgets["text_error"].visible = True
+                page.update()
+
+            rows =[]
+            for user in request["response"]:
+                rows.append(
+                    ft.DataRow(
+                        cells=[
+                            ft.DataCell(ft.Text(user["id"], style=ft.TextStyle(color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD))),
+                            ft.DataCell(ft.Text(user["name"], style=ft.TextStyle(color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD))),
+                            ft.DataCell(ft.Text(user["email"], style=ft.TextStyle(color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD))),
+                            ft.DataCell(ft.Text(str(user["admin"]), style=ft.TextStyle(color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD))),
+                            ft.DataCell(ft.Text(str(user["status"]), style=ft.TextStyle(color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD)))
+                        ]
+                    )
+                )
+
+
+            table = ft.DataTable(
+                columns=[
+                    ft.DataColumn(ft.Text("ID", style=ft.TextStyle(color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD)), numeric=True),
+                    ft.DataColumn(ft.Text("Nome", style=ft.TextStyle(color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD))),
+                    ft.DataColumn(ft.Text("Email", style=ft.TextStyle(color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD))),
+                    ft.DataColumn(ft.Text("Admin", style=ft.TextStyle(color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD))),
+                    ft.DataColumn(ft.Text("Status", style=ft.TextStyle(color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD)))
+                ],
+                rows=rows                
+            )
+
+            select_results.content = table
+            select_results.update()
+            
+            page.update()
+            
         
-    def go_to_create_click(e: ControlEvent):
-        
-        page.controls.clear()
-        create_account_widgets["text_error"].visible = False
-        page.add(create_account_view)
-        page.update()
-
-    def go_to_login_click(e: ControlEvent):
-
-        page.controls.clear()
-        login_widgets["text_error"].visible = False
-        page.add(login_view)
-        page.update()
-
-    def database_results_click(e: ControlEvent):
-        pass
-
-
     ### WIDGETS DO APLICATIVO ###
 
     login_widgets = {
-        "logo_project": ft.Image(src="/images/logo_projeto.png", width=200, height=200),
+        "logo_project": ft.Image(src="src/ADM/assets/images/logo_projeto.png", width=200, height=200),
         "text_login": ft.Text(value="LOGIN DE USUÁRIO", size=30, text_align=ft.TextAlign.CENTER, style=ft.TextStyle(font_family="LilitaOne-Regular", color=ft.Colors.PURPLE_300)),
         "user_email": ft.TextField(label="Email", width=300, border_color=ft.Colors.PURPLE_200),
         "user_password": ft.TextField(label="Senha", width=300, password=True, border_color=ft.Colors.PURPLE_200),
@@ -107,31 +172,42 @@ def main(page: Page):
             ],
             col=3,
             value="SELECT",
-            border_color=ft.colors.WHITE,
+            border_color=ft.Colors.WHITE,
+            border_width=3,
             bgcolor=ft.Colors.WHITE,
-            text_style=ft.TextStyle(color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)
+            text_style=ft.TextStyle(color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD),
             
         ),    
     }
 
     select_widgets = {
-        "title_database": ft.Text(value="Registros no banco de dados"),
-        "button_reload": ft.IconButton(icon=ft.Icons.REFRESH),
-        "select_table": ft.Dropdown(options=["Jogos", "Usuários", "Alugueis"], value="Jogos"),
+    "title_database": ft.Text(value="REGISTROS NO BANCO DE DADOS", col=10, style=ft.TextStyle(font_family="LilitaOne-Regular",color=ft.Colors.BLACK, size=20)),
+        "button_reload": ft.IconButton(icon=ft.Icons.REFRESH, col=2, on_click=select_results_click, style=ft.ButtonStyle(color=ft.Colors.WHITE, bgcolor="#601e9e")),
+        "text_no_results": ft.Text(value="Sem resultados por enquanto", text_align=ft.TextAlign.CENTER, style=ft.TextStyle(font_family="LilitaOne-Regular",color=ft.Colors.BLACK, size=20)),
+        "text_error": ft.Text(value="", visible=False, text_align=ft.TextAlign.CENTER),
+        "select_table": ft.Dropdown(
+            options=[
+                ft.DropdownOption(key="Jogos", content=ft.Text("Jogos", color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD)), 
+                ft.DropdownOption(key="Usuários", content=ft.Text("Usuários", color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD)), 
+                ft.DropdownOption(key="Alugueis", content=ft.Text("Alugueis", color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD))
+            ],
+            value="Usuários",
+            border_color=ft.Colors.WHITE,
+            border_width=0,
+            bgcolor=ft.Colors.WHITE,           
+        )
     }
 
-    select_widgets2= {   
-        "select_filter": ft.Dropdown(options=[
-                            "id", "nome", "preco", "quantidade", "genero" if select_widgets["select_table"].value == "Jogos" else
-                            "id", "nome", "email", "senha", "admin", "status" if select_widgets["select_table"].value == "Usuários" else
-                            "id", "id_jogo", "id_usuário", "data_aluguel", "data de devolução"
-                        ]
-        ),
-        "input_filter": ft.TextField(label="Filtro")
-    }
+
+    ### WIDGETS DINÂMICOS ###
+
+        
+    select_results = ft.Container(
+        content=select_widgets["text_no_results"],
+    )
 
 
-    ### HOME BAR PADÃO ###
+    ### PÁGINAS DO APLICATIVO ###
 
     home_bar = ft.Container(
         margin= 0,
@@ -148,7 +224,6 @@ def main(page: Page):
         )
     )
 
-    ### PÁGINAS DO APLICATIVO ###
 
     login_view = ft.Container(
         height=page.window.height,
@@ -237,9 +312,63 @@ def main(page: Page):
         )   
     )
 
+    select_view = ft.Container(
+        content=ft.ResponsiveRow(
+            controls=[
+                ft.Container(
+                    content=home_bar
+                ),
+                ft.Container(
+                    col=8,
+                    expand=True,
+                    bgcolor="#9c57f7",
+                    margin=ft.margin.all(40),
+                    border_radius=10,
+                    padding=0,
+                    content=ft.ResponsiveRow(
+                        controls=[
+                            ft.Container(
+                                bgcolor="#8944e3",
+                                padding=ft.padding.all(10),
+                                content=ft.ResponsiveRow(
+                                    vertical_alignment=ft.CrossAxisAlignment.CENTER,
+                                    controls=[
+                                        select_widgets["title_database"],
+                                        select_widgets["button_reload"]
+                                    ]
+                                )
+                            ),
+                            ft.Container(
+                                padding=ft.padding.all(30),
+                                content=ft.Column(
+                                    controls=[
+                                        select_results
+                                    ]
+                                )
+                            ),
+                            create_account_widgets["text_error"],
+
+                        ]
+                    )
+                ),
+                
+                ft.Container(
+                    col=4,
+                    margin=ft.margin.only(top=40, left=40),
+                    padding=ft.padding.all(30),
+                    content=ft.ResponsiveRow(
+                        controls=[
+                            ft.Container(
+                                content=select_widgets["select_table"]
+                            )    
+                        ]
+                    )
+                )
+            ]
+        )
+    )
     
             
-
     ### CONFIGURA A PÁGINA INICIAL PADRÃO ###
 
     page.add(login_view)

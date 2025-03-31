@@ -15,7 +15,7 @@ class GameRentalRepository:
             
         except Exception as error:
             connection.session.rollback()
-            return f"Erro ao tentar inserir registro ao banco"
+            return False
 
     def select(self) -> list:
         try:
@@ -23,12 +23,12 @@ class GameRentalRepository:
                 query = connection.session.query(GameRental).all()
 
                 if not query:
-                    raise  NoResultFound("Nenhum registro foi encontrado.")
+                    return False
                 
                 return query
             
         except Exception as error:
-            return f"Erro ao tentar procurar o registro no banco"
+            return None
  
 
     def update(self, id: int, user_id=None, game_id=None, game_rental_date=None, game_return_date=None) -> bool:
@@ -46,7 +46,7 @@ class GameRentalRepository:
 
             except Exception as error:
                 connection.session.rollback()
-                return f"Erro ao tentar atualizar registro no banco"
+                return None
             
     
     def delete(self, id:int) -> bool:
@@ -55,13 +55,13 @@ class GameRentalRepository:
                 query = connection.session.query(Games).filter(Games.game_id == id).first()
 
                 if not query:
-                    raise NoResultFound("Não foi encontrado nenhum registro com esse id")
+                    return False
                 
-                connection.session.query(Games).filter(Games.game_id == id).delete()
+                connection.session.delete(query)
                 connection.session.commit()
                 return True
 
             except Exception as error:
                 connection.session.rollback()
-                return f"Erro ao tentar deletar registro no banco"
+                return None
 

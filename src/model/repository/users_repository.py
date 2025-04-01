@@ -53,7 +53,20 @@ class UsersRepository:
                 
                 return response
             
-        except Exception as e:
+        except Exception as error:
+            return None
+        
+    def select_by_name(self, name: str) -> Users:
+        try:
+            with self.__connection_db as connetion:
+                response = connetion.session.query(Users).filter(Users.user_name == name).all()
+
+                if not response:
+                    return False
+                
+                return response
+            
+        except Exception as error:
             return None
      
 

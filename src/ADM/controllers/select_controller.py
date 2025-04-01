@@ -1,11 +1,13 @@
 from src.model.repository import UsersRepository, GameRentalRepository, GamesRepository
+from abc import ABC, abstractmethod
 from src.model.config import ConnectionMysqlDB
 from src.model.entities import Users, Games, GameRental
 
 
-class SelectController:
+class SelectController(ABC):
 
-    def select_all_users(self) -> dict:
+    @abstractmethod
+    def select_all_users() -> dict:
 
             request = UsersRepository(ConnectionMysqlDB()).select()
             response = []
@@ -21,8 +23,9 @@ class SelectController:
 
             return {"status": "success", "response": response, "message": "Usuários encontrados com sucesso!"}
     
-    
-    def select_all_games(self) -> dict:
+
+    @abstractmethod
+    def select_all_games() -> dict:
 
         request = GamesRepository(ConnectionMysqlDB()).select()
         response = []
@@ -39,7 +42,8 @@ class SelectController:
         return {"status": "success", "response": response, "message": "Jogos encontrados com sucesso!"}
     
 
-    def select_all_games_rental(self) -> dict:
+    @abstractmethod
+    def select_all_games_rental() -> dict:
 
         request = GameRentalRepository(ConnectionMysqlDB()).select()
         response = []
@@ -54,3 +58,9 @@ class SelectController:
             response.append({"rental_id": f"{rental.game_rental_id}", "user_id": f"{rental.user_id}", "game_id": f"{rental.game_id}", "rental_date": f"{rental.game_rental_date}", "return_date": f"{rental.game_return_date}"})
 
         return {"status": "success", "response": response, "message": "Jogos encontrados com sucesso!"}
+    
+
+    @abstractmethod
+    def select_users_by_filter() -> dict:
+
+        request = UsersRepository(ConnectionMysqlDB())

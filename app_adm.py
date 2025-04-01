@@ -103,16 +103,18 @@ def main(page: Page):
         rows = []
 
         table = select_widgets["select_table"].value
+        column = select_widgets["select_filter"].value
+        filtro = select_widgets["input_filter"].value
 
 
         if table == "Usuários":
-            request = SelectController().select_all_users()
+            request = SelectController.select_all_users()
         
         if table == "Jogos":
-            request = SelectController().select_all_games()
+            request = SelectController.select_all_games()
 
         if table == "Aluguéis":
-            request = SelectController().select_all_games_rental()
+            request = SelectController.select_all_games_rental()
 
 
         if request["status"] == "error":
@@ -151,6 +153,10 @@ def main(page: Page):
     
     def select_columns_click(e: ControlEvent):
 
+        select_widgets["select_filter"].value = "Todas"
+        select_widgets["input_filter"].visible = False
+        select_widgets["select_status_or_admin"].visible = False
+
         if select_widgets["select_table"].value == "Usuários":
             options_columns = ["ID", "Nome", "Email", "Admin", "Status", "Todas"]
         
@@ -165,6 +171,24 @@ def main(page: Page):
             options_filter.append(ft.DropdownOption(key=option, content=ft.Text(value=option, color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)))
 
         select_widgets["select_filter"].options = options_filter
+        select_view.update()
+        page.update()
+
+
+    def select_add_filter_click(e: ControlEvent):
+
+        if select_widgets["select_filter"].value == "Todas":
+            select_widgets["input_filter"].visible = False
+            select_widgets["select_status_or_admin"].visible = False
+        
+        if select_widgets["select_filter"].value == "Status" or select_widgets["select_filter"].value == "Admin":
+            select_widgets["input_filter"].visible = False
+            select_widgets["select_status_or_admin"].visible = True
+        
+        else:
+            select_widgets["select_status_or_admin"].visible = False
+            select_widgets["input_filter"].visible = True
+
         select_view.update()
         page.update()
 
@@ -219,7 +243,7 @@ def main(page: Page):
         "button_reload": ft.IconButton(icon=ft.Icons.REFRESH, col=2, on_click=select_results_click, style=ft.ButtonStyle(color=ft.Colors.WHITE, bgcolor="#601e9e")),
         "text_no_results": ft.Text(value="Sem resultados por enquanto", text_align=ft.TextAlign.CENTER, style=ft.TextStyle(font_family="LilitaOne-Regular",color="#441b70", size=20)),
         "text_error": ft.Text(value="", visible=False, text_align=ft.TextAlign.CENTER),
-        "input_filter": ft.TextField(label="Digite o filtro", border_color=ft.Colors.PURPLE_200, border_width=1, width=150),
+        "input_filter": ft.TextField(label="Digite o filtro", border_color=ft.Colors.PURPLE_200, border_width=1, width=150, visible=False),
         "select_table": ft.Dropdown(
             options=[
                 ft.DropdownOption(key="Jogos", content=ft.Text("Jogos", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)), 
@@ -244,7 +268,19 @@ def main(page: Page):
             value="Todas", 
             border_color=ft.Colors.PURPLE_200, 
             border_width=1, 
-            width=150 
+            width=150,
+            on_change=select_add_filter_click
+        ),
+        "select_status_or_admin":ft.Dropdown(
+            options=[
+                ft.DropdownOption(key="True", content=ft.Text(value="True", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)),
+                ft.DropdownOption(key="False", content=ft.Text(value="False", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD))
+            ],
+            label="Filtro", 
+            border_color=ft.Colors.PURPLE_200, 
+            border_width=1, 
+            width=150, 
+            visible=False
         )
         
     }
@@ -384,7 +420,8 @@ def main(page: Page):
                                     controls=[
                                         select_widgets["select_table"],
                                         select_widgets["select_filter"],
-                                        select_widgets["input_filter"]
+                                        select_widgets["input_filter"],
+                                        select_widgets["select_status_or_admin"]
                                     ]
                                 )
 

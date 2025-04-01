@@ -10,14 +10,17 @@ def main(page: Page):
 
     page.title = "App ADM - GameOver"
     page.bgcolor = "#160f1c"
-    page.window.min_width = 1000
-    page.window.min_height = 900
+    page.window.width = 1280
+    page.window.height = 720
+    page.window.min_width = 880
+    page.window.min_height = 700
     page.padding = 0
     page.scroll = ft.ScrollMode.AUTO
     page.theme_mode = ft.ThemeMode.DARK
     page.fonts = {
         "LilitaOne-Regular": "src/ADM/assets/fonts/LilitaOne-Regular.ttf"
     }
+
 
 
     ### FUNÇÕES DE TROCA DE PÁGINAS ###
@@ -48,8 +51,10 @@ def main(page: Page):
         select_widgets["text_error"].value = ""
         select_widgets["text_error"].visible = False
         select_results.content = select_widgets["text_no_results"]
+        select_columns_click(e)
         page.add(select_view)
         page.update()
+
 
 
     ### FUNÇÕES DE CHECAGEM DE DADOS ###
@@ -89,9 +94,14 @@ def main(page: Page):
         page.update()
         
 
+
     ### FUNÇÕES DE SELEÇÃO DE DADOS ###
 
     def select_results_click(e: ControlEvent, table:str="Usuários", column:str=None, filter:str=None):
+
+        response = []
+        columns = []
+        rows = []
 
 
         if table == "Usuários":
@@ -103,38 +113,54 @@ def main(page: Page):
                 select_widgets["text_error"].visible = True
                 page.update()
 
-            rows =[]
-            for user in request["response"]:
-                rows.append(
-                    ft.DataRow(
-                        cells=[
-                            ft.DataCell(ft.Text(user["id"], style=ft.TextStyle(color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD))),
-                            ft.DataCell(ft.Text(user["name"], style=ft.TextStyle(color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD))),
-                            ft.DataCell(ft.Text(user["email"], style=ft.TextStyle(color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD))),
-                            ft.DataCell(ft.Text(str(user["admin"]), style=ft.TextStyle(color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD))),
-                            ft.DataCell(ft.Text(str(user["status"]), style=ft.TextStyle(color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD)))
-                        ]
-                    )
-                )
+            for registro in request["response"]:
+                response.append(registro)
 
-
-            table = ft.DataTable(
-                columns=[
-                    ft.DataColumn(ft.Text("ID", style=ft.TextStyle(color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD)), numeric=True),
-                    ft.DataColumn(ft.Text("Nome", style=ft.TextStyle(color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD))),
-                    ft.DataColumn(ft.Text("Email", style=ft.TextStyle(color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD))),
-                    ft.DataColumn(ft.Text("Admin", style=ft.TextStyle(color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD))),
-                    ft.DataColumn(ft.Text("Status", style=ft.TextStyle(color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD)))
-                ],
-                rows=rows                
-            )
-
-            select_results.content = table
-            select_results.update()
-            
-            page.update()
-            
         
+        while not columns:
+
+            for column in response[0].keys():
+                columns.append(ft.DataColumn(ft.Text(column, style=ft.TextStyle(color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD))))
+
+        for record in response:
+            
+            values = []
+            for value in record.values():
+                values.append(ft.DataCell(ft.Text(value, style=ft.TextStyle(color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD))))
+
+            rows.append(ft.DataRow(cells=values))
+
+        table = ft.DataTable(
+            columns=columns,
+            rows=rows                
+        )
+
+        select_results.content = table
+        select_results.update()
+            
+        page.update()
+
+    
+    def select_columns_click(e: ControlEvent):
+
+        if select_widgets["select_table"].value == "Usuários":
+            options_columns = ["ID", "Nome", "Email", "Admin", "Status", "Todas"]
+        
+        elif select_widgets["select_table"].value == "Jogos":
+            options_columns = ["ID", "Nome", "Preço", "Quantidade", "Genero", "Todas"]
+
+        elif select_widgets["select_table"].value == "Alugueis":
+            options_columns = ["ID", "Usuário", "Jogo", "Data de aluguel", "Data de devolução", "Status", "Todas"]
+
+        options_filter = []
+        for option in options_columns:
+            options_filter.append(ft.DropdownOption(key=option, content=ft.Text(value=option, color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)))
+
+        select_widgets["select_filter"].options = options_filter
+        select_view.update()
+        page.update()
+
+
     ### WIDGETS DO APLICATIVO ###
 
     login_widgets = {
@@ -183,20 +209,38 @@ def main(page: Page):
     select_widgets = {
     "title_database": ft.Text(value="REGISTROS NO BANCO DE DADOS", col=10, style=ft.TextStyle(font_family="LilitaOne-Regular",color=ft.Colors.BLACK, size=20)),
         "button_reload": ft.IconButton(icon=ft.Icons.REFRESH, col=2, on_click=select_results_click, style=ft.ButtonStyle(color=ft.Colors.WHITE, bgcolor="#601e9e")),
-        "text_no_results": ft.Text(value="Sem resultados por enquanto", text_align=ft.TextAlign.CENTER, style=ft.TextStyle(font_family="LilitaOne-Regular",color=ft.Colors.BLACK, size=20)),
+        "text_no_results": ft.Text(value="Sem resultados por enquanto", text_align=ft.TextAlign.CENTER, style=ft.TextStyle(font_family="LilitaOne-Regular",color="#441b70", size=20)),
         "text_error": ft.Text(value="", visible=False, text_align=ft.TextAlign.CENTER),
+        "input_filter": ft.TextField(label="Digite o filtro", border_color=ft.Colors.PURPLE_200, border_width=1, width=150),
         "select_table": ft.Dropdown(
             options=[
-                ft.DropdownOption(key="Jogos", content=ft.Text("Jogos", color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD)), 
-                ft.DropdownOption(key="Usuários", content=ft.Text("Usuários", color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD)), 
-                ft.DropdownOption(key="Alugueis", content=ft.Text("Alugueis", color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD))
+                ft.DropdownOption(key="Jogos", content=ft.Text("Jogos", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)), 
+                ft.DropdownOption(key="Usuários", content=ft.Text("Usuários", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)), 
+                ft.DropdownOption(key="Alugueis", content=ft.Text("Alugueis", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD))
             ],
+            width=150,
             value="Usuários",
-            border_color=ft.Colors.WHITE,
-            border_width=0,
-            bgcolor=ft.Colors.WHITE,           
+            border_color=ft.Colors.PURPLE_200,
+            border_width=1,
+            on_change=select_columns_click          
+        ),
+        "select_filter": ft.Dropdown(
+            options=[
+                ft.DropdownOption(key="ID", content=ft.Text("ID", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)),
+                ft.DropdownOption(key="Nome", content=ft.Text("Nome", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)),
+                ft.DropdownOption(key="Email", content=ft.Text("Email", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)),
+                ft.DropdownOption(key="Admin", content=ft.Text("Admin", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)),
+                ft.DropdownOption(key="Status", content=ft.Text("Status", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)),
+                ft.DropdownOption(key="Todas", content=ft.Text("Todas", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD))
+            ], 
+            value="Todas", 
+            border_color=ft.Colors.PURPLE_200, 
+            border_width=1, 
+            width=150 
         )
+        
     }
+
 
 
     ### WIDGETS DINÂMICOS ###
@@ -205,6 +249,7 @@ def main(page: Page):
     select_results = ft.Container(
         content=select_widgets["text_no_results"],
     )
+
 
 
     ### PÁGINAS DO APLICATIVO ###
@@ -313,13 +358,35 @@ def main(page: Page):
     )
 
     select_view = ft.Container(
-        content=ft.ResponsiveRow(
+        content=ft.Column(
+            alignment=ft.MainAxisAlignment.CENTER,
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             controls=[
                 ft.Container(
                     content=home_bar
                 ),
                 ft.Container(
-                    col=8,
+                    margin=ft.margin.only(top=40, left=40),
+                    padding=ft.padding.all(30),
+                    content=ft.ResponsiveRow(
+                        controls=[
+                            ft.Container(
+                                content=ft.Row(
+                                    alignment=ft.MainAxisAlignment.CENTER,
+                                    controls=[
+                                        select_widgets["select_table"],
+                                        select_widgets["select_filter"],
+                                        select_widgets["input_filter"]
+                                    ]
+                                )
+
+                            )    
+                        ]
+                    )
+                ),
+
+                ft.Container(
+                    width=700,
                     expand=True,
                     bgcolor="#9c57f7",
                     margin=ft.margin.all(40),
@@ -350,24 +417,12 @@ def main(page: Page):
 
                         ]
                     )
-                ),
-                
-                ft.Container(
-                    col=4,
-                    margin=ft.margin.only(top=40, left=40),
-                    padding=ft.padding.all(30),
-                    content=ft.ResponsiveRow(
-                        controls=[
-                            ft.Container(
-                                content=select_widgets["select_table"]
-                            )    
-                        ]
-                    )
-                )
+                )      
             ]
         )
     )
     
+
             
     ### CONFIGURA A PÁGINA INICIAL PADRÃO ###
 

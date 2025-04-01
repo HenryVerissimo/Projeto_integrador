@@ -45,7 +45,7 @@ class SelectController:
         response = []
 
         if request is False:
-            return {"status": "error", "response": "", "message": "Nenhum jogo encontrado!"}
+            return {"status": "error", "response": "", "message": "Nenhum jogo alugado encontrado!"}
         
         elif request is None:
             return {"status": "error", "response": "", "message": "Erro ao tentar encontrar jogos no banco de dados!"}

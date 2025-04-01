@@ -51,7 +51,6 @@ def main(page: Page):
         select_widgets["text_error"].value = ""
         select_widgets["text_error"].visible = False
         select_results.content = select_widgets["text_no_results"]
-        select_columns_click(e)
         page.add(select_view)
         page.update()
 
@@ -97,28 +96,37 @@ def main(page: Page):
 
     ### FUNÇÕES DE SELEÇÃO DE DADOS ###
 
-    def select_results_click(e: ControlEvent, table:str="Usuários", column:str=None, filter:str=None):
+    def select_results_click(e: ControlEvent):
 
         response = []
         columns = []
         rows = []
 
+        table = select_widgets["select_table"].value
+
 
         if table == "Usuários":
-
             request = SelectController().select_all_users()
+        
+        if table == "Jogos":
+            request = SelectController().select_all_games()
 
-            if request["status"] == "error":
-                select_widgets["text_error"].value = request["message"]
-                select_widgets["text_error"].visible = True
-                page.update()
+        if table == "Aluguéis":
+            request = SelectController().select_all_games_rental()
 
-            for registro in request["response"]:
-                response.append(registro)
 
+        if request["status"] == "error":
+            select_results.clean()
+            select_results.content = ft.Text(value=str(request["message"]), text_align=ft.TextAlign.CENTER, style=ft.TextStyle(font_family="LilitaOne-Regular",color="#441b70", size=20))
+            select_results.update()
+            page.update()
+            return None
+
+        for registro in request["response"]:
+            response.append(registro)
         
         while not columns:
-
+            
             for column in response[0].keys():
                 columns.append(ft.DataColumn(ft.Text(column, style=ft.TextStyle(color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD))))
 
@@ -149,7 +157,7 @@ def main(page: Page):
         elif select_widgets["select_table"].value == "Jogos":
             options_columns = ["ID", "Nome", "Preço", "Quantidade", "Genero", "Todas"]
 
-        elif select_widgets["select_table"].value == "Alugueis":
+        elif select_widgets["select_table"].value == "Aluguéis":
             options_columns = ["ID", "Usuário", "Jogo", "Data de aluguel", "Data de devolução", "Status", "Todas"]
 
         options_filter = []
@@ -216,7 +224,7 @@ def main(page: Page):
             options=[
                 ft.DropdownOption(key="Jogos", content=ft.Text("Jogos", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)), 
                 ft.DropdownOption(key="Usuários", content=ft.Text("Usuários", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)), 
-                ft.DropdownOption(key="Alugueis", content=ft.Text("Alugueis", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD))
+                ft.DropdownOption(key="Aluguéis", content=ft.Text("Alugueis", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD))
             ],
             width=150,
             value="Usuários",

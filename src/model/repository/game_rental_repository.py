@@ -20,12 +20,12 @@ class GameRentalRepository:
     def select(self) -> list:
         try:
             with self.__connection_db as connection:
-                query = connection.session.query(GameRental).all()
+                response = connection.session.query(GameRental).all()
 
-                if not query:
+                if not response:
                     return False
                 
-                return query
+                return response
             
         except Exception as error:
             return None
@@ -52,9 +52,9 @@ class GameRentalRepository:
     def delete(self, id:int) -> bool:
         with self.__connection_db as connection:
             try:
-                query = connection.session.query(Games).filter(Games.game_id == id).first()
+                response = connection.session.query(Games).filter(Games.game_id == id).first()
 
-                if not query:
+                if not response:
                     return False
                 
                 connection.session.delete(query)

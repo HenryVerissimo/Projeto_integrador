@@ -9,7 +9,7 @@ class Games(Base):
     game_id = Column(Integer, primary_key=True)
     game_name = Column(String(100), nullable=False)
     game_price = Column(DECIMAL(10, 2), nullable=False )
-    games_quantity = Column(Integer, default=0)
+    game_quantity = Column(Integer, default=0)
     game_genre = Column(String(100))
     game_description= Column(Text)
     

@@ -19,28 +19,30 @@ class GamesRepository:
 
     
     def select(self) -> list:
-        with self.__connection_db as connection:
-            try:
-                query = connection.session.query(Games).all()
+        try:
+            with self.__connection_db as connection:
+            
+                response = connection.session.query(Games).all()
 
-                if not query:
+                if not response:
                     return False
                 
-                return query
+                return response
             
-            except Exception as e:
-                return None
+        except Exception as e:
+            print(e)
+            return None
         
     
     def select_one(self, id:int) -> Games:
         with self.__connection_db as connection:
             try:
-                query = connection.session.query(Games).filter(Games.game_id == id).first()
+                response = connection.session.query(Games).filter(Games.game_id == id).first()
 
-                if not query:
+                if not response:
                     return False
                 
-                return query
+                return response
             
             except Exception as error:
                 return None
@@ -67,9 +69,9 @@ class GamesRepository:
     def delete(self, id:int) -> bool:
         with self.__connection_db as connection:
             try:
-                query = connection.session.query(Games).filter(Games.game_id == id).first()
+                response = connection.session.query(Games).filter(Games.game_id == id).first()
 
-                if not query:
+                if not response:
                     raise NoResultFound("Nenhum registro encontrado com esse id")
                 
                 connection.session.query(Games).filter(Games.game_id == id).delete()

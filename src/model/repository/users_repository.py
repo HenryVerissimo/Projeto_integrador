@@ -34,10 +34,14 @@ class UsersRepository:
             return None
 
             
-    def select_one_by_id(self,id:int) -> Users:
+    def select_by_id(self,id:int) -> Users:
         try:
             with self.__connection_db as connection:
                 response = connection.session.query(Users).filter(Users.user_id == id).first()
+
+                if not response:
+                    return False
+                
                 return response
             
         except Exception as error:
@@ -68,7 +72,33 @@ class UsersRepository:
             
         except Exception as error:
             return None
-     
+        
+    def select_by_status(self, status: bool) -> Users:
+        try:
+            with self.__connection_db as connection:
+                response = connection.session.query(Users).filter(Users.user_status == status).all()
+
+                if not response:
+                    return False
+                
+                return response
+            
+        except Exception as error:
+            return None
+        
+
+    def select_by_admin(self, admin: bool) -> Users:
+        try:
+            with self.__connection_db as connection:
+                response = connection.session.query(Users).filter(Users.user_admin == admin).all()
+
+                if not response:
+                    return False
+                
+                return response
+        
+        except Exception as error:
+            return None
 
     def update(self, id:int, name:str = None, email:str = None, password:int = None, admin:bool = None) -> bool | None:
         parameters = {"user_name": name, "user_email": email, "user_password": password, "user_admin": admin}

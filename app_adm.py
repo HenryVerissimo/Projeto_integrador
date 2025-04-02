@@ -104,11 +104,15 @@ def main(page: Page):
 
         table = select_widgets["select_table"].value
         column = select_widgets["select_filter"].value
-        filtro = select_widgets["input_filter"].value
+        value = select_widgets["input_filter"].value
 
 
         if table == "Usuários":
-            request = SelectController.select_all_users()
+            if select_widgets["select_filter"].value == "Todas":
+                request = SelectController.select_all_users()
+            
+            else:
+                request = SelectController.select_users_by_filter(column=column, value=value)
         
         if table == "Jogos":
             request = SelectController.select_all_games()
@@ -179,9 +183,9 @@ def main(page: Page):
 
         if select_widgets["select_filter"].value == "Todas":
             select_widgets["input_filter"].visible = False
-            select_widgets["select_status_or_admin"].visible = False
+            select_widgets["select_status_or_admin"].visible = False 
         
-        if select_widgets["select_filter"].value == "Status" or select_widgets["select_filter"].value == "Admin":
+        elif select_widgets["select_filter"].value == "Status" or select_widgets["select_filter"].value == "Admin":
             select_widgets["input_filter"].visible = False
             select_widgets["select_status_or_admin"].visible = True
         

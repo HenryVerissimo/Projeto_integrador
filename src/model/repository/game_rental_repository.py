@@ -1,4 +1,4 @@
-from src.model import GameRental, Games
+from src.model import GameRental
 
 
 class GameRentalRepository:
@@ -29,6 +29,76 @@ class GameRentalRepository:
             
         except Exception as error:
             return None
+        
+
+    def select_by_id(self, id:int) -> GameRental:
+        try:
+            with self.__connection_db as connection:
+                response = connection.session.query(GameRental).filter(GameRental.game_rental_id == id).first()
+
+                if not response:
+                    return False
+                
+                return response
+            
+        except Exception as error:
+            return None
+        
+
+    def select_by_user_id(self, id:int) -> list:
+        try:
+            with self.__connection_db as connection:
+                response = connection.session.query(GameRental).filter(GameRental.user_id == id).all()
+
+                if not response:
+                    return False
+                
+                return response
+            
+        except Exception as error:
+            return None
+        
+
+    def select_by_game_id(self, id:int) -> list:
+        try:
+            with self.__connection_db as connection:
+                response = connection.session.query(GameRental).filter(GameRental.game_id == id).all()
+
+                if not response:
+                    return False
+                
+                return response
+            
+        except Exception as error:
+            return None
+        
+
+    def select_by_rental_date(self, date: str) -> list:
+        try:
+            with self.__connection_db as connection:
+                response = connection.session.query(GameRental).filter(GameRental.game_rental_date == date).all()
+
+                if not response:
+                    return False
+                
+                return response
+            
+        except Exception as error:
+            return None
+        
+
+    def select_by_return_date(self, date:str) -> list:
+        try:
+            with self.__connection_db as connection:
+                response = connection.session.query(GameRental).filter(GameRental.game_return_date == date).first()
+
+                if not response:
+                    return False
+                
+                return response
+            
+        except Exception as error:
+            return None
  
 
     def update(self, id: int, user_id=None, game_id=None, game_rental_date=None, game_return_date=None) -> bool:
@@ -40,7 +110,7 @@ class GameRentalRepository:
 
         with self.__connection_db as connection:
             try:
-                connection.session.query(Games).filter(Games.game_id == id).update(parameters)
+                connection.session.query(GameRental).filter(GameRental.game_id == id).update(parameters)
                 connection.session.commit()
                 return True
 
@@ -52,12 +122,12 @@ class GameRentalRepository:
     def delete(self, id:int) -> bool:
         with self.__connection_db as connection:
             try:
-                response = connection.session.query(Games).filter(Games.game_id == id).first()
+                response = connection.session.query(GameRental).filter(GameRental.game_rental_id == id).first()
 
                 if not response:
                     return False
                 
-                connection.session.delete(query)
+                connection.session.delete(response)
                 connection.session.commit()
                 return True
 

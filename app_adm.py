@@ -127,7 +127,11 @@ def main(page: Page):
 
 
         if table == "Aluguéis":
-            request = SelectController.select_all_games_rental()
+            if select_widgets["select_filter"].value == "Todas":
+                request = SelectController.select_all_games_rental()
+
+            else:
+                request = SelectController.select_games_rental_by_filter(column=column, value=value)
 
 
         if request["status"] == "error":
@@ -236,13 +240,13 @@ def main(page: Page):
         "text_logout": ft.TextButton(icon=ft.Icons.EXIT_TO_APP, text="SAIR DA CONTA", col=3, style=ft.ButtonStyle(color=ft.Colors.WHITE), icon_color=ft.Colors.WHITE, on_click=go_to_login_click),
         "select_operations": ft.Dropdown(
             options=[
-                ft.DropdownOption(key="INSERT", content= ft.Text("INSERT", color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD)), 
-                ft.DropdownOption(key = "SELECT", content= ft.Text("SELECT", color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD)), 
-                ft.DropdownOption(key = "UPDATE", content= ft.Text("UPDATE", color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD)), 
-                ft.DropdownOption(key = "DELETE", content= ft.Text("DELETE", color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD))
+                ft.DropdownOption(key="INSERIR", content= ft.Text("INSERIR", color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD)), 
+                ft.DropdownOption(key = "CONSULTAR", content= ft.Text("CONSULTAR", color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD)), 
+                ft.DropdownOption(key = "ATUALIZAR", content= ft.Text("ATUALIZAR", color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD)), 
+                ft.DropdownOption(key = "DELETAR", content= ft.Text("DELETAR", color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD))
             ],
             col=3,
-            value="SELECT",
+            value="CONSULTAR",
             border_color=ft.Colors.WHITE,
             border_width=3,
             bgcolor=ft.Colors.WHITE,
@@ -261,7 +265,7 @@ def main(page: Page):
             options=[
                 ft.DropdownOption(key="Jogos", content=ft.Text("Jogos", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)), 
                 ft.DropdownOption(key="Usuários", content=ft.Text("Usuários", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)), 
-                ft.DropdownOption(key="Aluguéis", content=ft.Text("Alugueis", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD))
+                ft.DropdownOption(key="Aluguéis", content=ft.Text("Aluguéis", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD))
             ],
             width=150,
             value="Usuários",

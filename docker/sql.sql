@@ -24,6 +24,6 @@ CREATE TABLE game_rental (
     game_id INT,
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (game_id) REFERENCES games(game_id),
-    game_rental_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    game_rental_date DATE,
     game_return_date DATE    
 );

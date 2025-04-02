@@ -2,6 +2,7 @@ from src.model.repository import UsersRepository, GameRentalRepository, GamesRep
 from abc import ABC, abstractmethod
 from src.model.config import ConnectionMysqlDB
 from src.model.entities import Users, Games, GameRental
+from datetime import datetime
 
 
 class SelectController(ABC):
@@ -149,3 +150,78 @@ class SelectController(ABC):
             response.append({"id": f"{request.game_id}", "name": f"{request.game_name}", "price": f"{request.game_price}", "quantity": f"{request.game_quantity}", "genre": f"{request.game_genre}"})
         
         return {"status": "success", "response": response, "message": "Jogos encontrados com sucesso!"}
+    
+
+    @abstractmethod
+    def select_games_rental_by_filter(column: str, value: str) -> dict:
+        repository = GameRentalRepository(ConnectionMysqlDB())
+        response = []
+
+        if column not in ["Todas"] and value in ["", None]:
+            return {"status": "error", "response": "", "message": "Forneça um parâmetro para filtragem!"}  
+
+        if column == "ID":
+            request = repository.select_by_id(id=int(value))
+
+        elif column == "Usuário":
+            request = repository.select_by_user_id(id=value)
+
+        elif column == "Jogo":
+            request = repository.select_by_game_id(id=value)
+
+        elif column == "Data de aluguel":
+
+            if "/" in value:
+                value = value.replace("/", "-")
+
+            count_char = 0
+            for number in value:
+                if number == "-":
+                    break
+
+                count_char += 1
+
+            if count_char == 2:
+                date_split = value.split("-")
+                value = f"{date_split[2]}-{date_split[1]}-{date_split[0]}"
+
+            value = datetime.strptime(value, "%Y-%m-%d").date()
+
+            request = repository.select_by_rental_date(date=value)
+
+        elif column == "Data de devolução":
+
+            if "/" in value:
+                value = value.replace("/", "-")
+
+            count_char = 0
+            for number in value:
+                if number == "-":
+                    break
+
+                count_char += 1
+
+            if count_char == 2:
+                date_split = value.split("-")
+                value = f"{date_split[2]}-{date_split[1]}-{date_split[0]}"
+                
+
+            value = datetime.strptime(value, "%Y-%m-%d").date()
+
+            request = repository.select_by_return_date(date=value)
+
+        if request is False:
+            return {"status": "error", "response": "", "message": "Nenhum aluguel encontrado!"}
+        
+        elif request is None:
+            return {"status": "error", "response": "", "message": "Erro ao tentar encontrar aluguéis no banco de dados!"}
+        
+        if isinstance(request, list):
+
+            for rental in request:
+                response.append({"rental_id": f"{rental.game_rental_id}", "user_id": f"{rental.user_id}", "game_id": f"{rental.game_id}", "rental_date": f"{rental.game_rental_date}", "return_date": f"{rental.game_return_date}"})
+
+        elif isinstance(request, GameRental):
+            response.append({"rental_id": f"{request.game_rental_id}", "user_id": f"{request.user_id}", "game_id": f"{request.game_id}", "rental_date": f"{request.game_rental_date}", "return_date": f"{request.game_return_date}"})
+        
+        return {"status": "success", "response": response, "message": "Aluguéis encontrados com sucesso!"}

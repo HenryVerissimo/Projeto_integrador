@@ -34,7 +34,7 @@ class GamesRepository:
             return None
         
     
-    def select_one(self, id:int) -> Games:
+    def select_by_id(self, id:int) -> Games:
         with self.__connection_db as connection:
             try:
                 response = connection.session.query(Games).filter(Games.game_id == id).first()
@@ -46,7 +46,61 @@ class GamesRepository:
             
             except Exception as error:
                 return None
+            
+    
+    def select_by_name(self, name:str) -> list:
+        with self.__connection_db as connection:
+            try:
+                response = connection.session.query(Games).filter(Games.game_name == name).all()
 
+                if not response:
+                    return False
+                
+                return response
+            
+            except Exception as error:
+                return None
+            
+    def select_by_price(self, price:float) -> list:
+        with self.__connection_db as connection:
+            try:
+                response = connection.session.query(Games).filter(Games.game_price == price).all()
+
+                if not response:
+                    return False
+                
+                return response
+            
+            except Exception as error:
+                return None
+            
+
+    def select_by_quantity(self, quantity:int) -> Games:
+        with self.__connection_db as connection:
+            try:
+                response = connection.session.query(Games).filter(Games.game_quantity == quantity).all()
+
+                if not response:
+                    return False
+                
+                return response
+            
+            except Exception as error:
+                return None
+            
+
+    def select_by_genre(self, genre:str) -> Games:
+        with self.__connection_db as connection:
+            try:
+                response = connection.session.query(Games).filter(Games.game_genre == genre).all()
+
+                if not response:
+                    return False
+                
+                return response
+            
+            except Exception as error:
+                return None
     
     def update(self, id: int, name:str = None, quantity:int = None, price:float = None, genre:str = None, description:str = None) -> bool:
         parameters = {"game_name": name, "game_quantity": quantity, "game_price": price, "game_description": description}
@@ -72,7 +126,7 @@ class GamesRepository:
                 response = connection.session.query(Games).filter(Games.game_id == id).first()
 
                 if not response:
-                    raise NoResultFound("Nenhum registro encontrado com esse id")
+                    return False
                 
                 connection.session.query(Games).filter(Games.game_id == id).delete()
                 connection.session.commit()

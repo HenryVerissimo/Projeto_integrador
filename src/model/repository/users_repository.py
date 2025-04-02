@@ -74,6 +74,7 @@ class UsersRepository:
             return None
         
     def select_by_status(self, status: bool) -> Users:
+
         try:
             with self.__connection_db as connection:
                 response = connection.session.query(Users).filter(Users.user_status == status).all()

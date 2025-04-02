@@ -66,6 +66,15 @@ class SelectController(ABC):
         repository = UsersRepository(ConnectionMysqlDB())
         response = []
 
+        if column not in ["Todas"] and value in ["", None]:
+            return {"status": "error", "response": "", "message": "Forneça um parâmetro para filtragem!"}
+        
+        if value == "False":
+            value = False
+
+        elif value == "True":
+            value = True   
+
         if column == "ID":
             request = repository.select_by_id(id=int(value))
 
@@ -77,21 +86,9 @@ class SelectController(ABC):
 
         elif column == "Admin":
 
-            if value == "True":
-                value = True
-            
-            elif value == "False":
-                value = False
-
             request = repository.select_by_admin(admin=value)
 
         elif column == "Status":
-
-            if value == "True":
-                value = True
-            
-            elif value == "False":
-                value = False
 
             request = repository.select_by_status(status=value)
 
@@ -110,5 +107,45 @@ class SelectController(ABC):
             response.append({"id": f"{request.user_id}", "name": f"{request.user_name}", "email": f"{request.user_email}", "admin": f"{request.user_admin}", "status": f"{request.user_status}"})
         
         return {"status": "success", "response": response, "message": "Usuários encontrados com sucesso!"}
+    
 
+    @abstractmethod
+    def select_games_by_filter(column: str, value: str) -> dict:
+        repository = GamesRepository(ConnectionMysqlDB())
+        response = []
+
+        if column not in ["Todas"] and value in ["", None]:
+            return {"status": "error", "response": "", "message": "Forneça um parâmetro para filtragem!"}  
+
+        if column == "ID":
+            request = repository.select_by_id(id=int(value))
+
+        elif column == "Nome":
+            request = repository.select_by_name(name=value)
+
+        elif column == "Preço":
+            request = repository.select_by_price(price=value)
+
+        elif column == "Quantidade":
+
+            request = repository.select_by_quantity(quantity=value)
+
+        elif column == "Genero":
+
+            request = repository.select_by_genre(genre=value)
+
+        if request is False:
+            return {"status": "error", "response": "", "message": "Nenhum Jogo encontrado!"}
         
+        elif request is None:
+            return {"status": "error", "response": "", "message": "Erro ao tentar encontrar Jogos no banco de dados!"}
+        
+        if isinstance(request, list):
+
+            for game in request:
+                response.append({"id": f"{game.game_id}", "name": f"{game.game_name}", "price": f"{game.game_price}", "quantity": f"{game.game_quantity}", "genre": f"{game.game_genre}"})
+
+        elif isinstance(request, Games):
+            response.append({"id": f"{request.game_id}", "name": f"{request.game_name}", "price": f"{request.game_price}", "quantity": f"{request.game_quantity}", "genre": f"{request.game_genre}"})
+        
+        return {"status": "success", "response": response, "message": "Jogos encontrados com sucesso!"}

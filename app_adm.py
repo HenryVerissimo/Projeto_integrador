@@ -105,17 +105,26 @@ def main(page: Page):
         table = select_widgets["select_table"].value
         column = select_widgets["select_filter"].value
         value = select_widgets["input_filter"].value
+        bool_value = select_widgets["select_status_or_admin"].value
 
 
         if table == "Usuários":
             if select_widgets["select_filter"].value == "Todas":
                 request = SelectController.select_all_users()
             
+            elif select_widgets["select_filter"].value == "Status" or select_widgets["select_filter"].value == "Admin":
+                request = SelectController.select_users_by_filter(column=column, value=bool_value)
+            
             else:
                 request = SelectController.select_users_by_filter(column=column, value=value)
         
         if table == "Jogos":
-            request = SelectController.select_all_games()
+            if select_widgets["select_filter"].value == "Todas":
+                request = SelectController.select_all_games()
+
+            else:
+                request = SelectController.select_games_by_filter(column=column, value=value)
+
 
         if table == "Aluguéis":
             request = SelectController.select_all_games_rental()
@@ -168,7 +177,7 @@ def main(page: Page):
             options_columns = ["ID", "Nome", "Preço", "Quantidade", "Genero", "Todas"]
 
         elif select_widgets["select_table"].value == "Aluguéis":
-            options_columns = ["ID", "Usuário", "Jogo", "Data de aluguel", "Data de devolução", "Status", "Todas"]
+            options_columns = ["ID", "Usuário", "Jogo", "Data de aluguel", "Data de devolução", "Todas"]
 
         options_filter = []
         for option in options_columns:
@@ -210,7 +219,7 @@ def main(page: Page):
     }
 
     create_account_widgets = {
-        "user_icon": ft.Image(src="images/user.png", width=150, height=150),
+        "user_icon": ft.Image(src="src/ADM/assets/images/user.png", width=150, height=150),
         "text_create_account": ft.Text( value="CRIAR UMA CONTA", size=30, text_align=ft.TextAlign.CENTER, style=ft.TextStyle(font_family="LilitaOne-Regular", color=ft.Colors.PURPLE_300)),
         "create_name": ft.TextField(label="Nome", width=300, border_color=ft.Colors.PURPLE_200,),
         "create_email": ft.TextField(label="Email", width=300, border_color=ft.Colors.PURPLE_200,),

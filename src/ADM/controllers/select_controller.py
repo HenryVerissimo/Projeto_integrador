@@ -163,10 +163,10 @@ class SelectController(ABC):
         if column == "ID":
             request = repository.select_by_id(id=int(value))
 
-        elif column == "Usuário":
+        elif column == "ID do usuário":
             request = repository.select_by_user_id(id=value)
 
-        elif column == "Jogo":
+        elif column == "ID do jogo":
             request = repository.select_by_game_id(id=value)
 
         elif column == "Data de aluguel":

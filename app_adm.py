@@ -45,13 +45,16 @@ def main(page: Page):
         page.add(login_view)
         page.update()
 
-    def go_to_select_click(e: ControlEvent):
+    def go_to_operations_click(e: ControlEvent):
 
         page.controls.clear()
-        select_widgets["text_error"].value = ""
-        select_widgets["text_error"].visible = False
-        select_results.content = select_widgets["text_no_results"]
-        page.add(select_view)
+
+        if home_bar_widgets["select_operations"].value == "CONSULTAR":
+            page.add(select_view)
+
+        if home_bar_widgets["select_operations"].value == "INSERIR":
+            page.add(insert_view)
+
         page.update()
 
 
@@ -181,7 +184,7 @@ def main(page: Page):
             options_columns = ["ID", "Nome", "Preço", "Quantidade", "Genero", "Todas"]
 
         elif select_widgets["select_table"].value == "Aluguéis":
-            options_columns = ["ID", "Usuário", "Jogo", "Data de aluguel", "Data de devolução", "Todas"]
+            options_columns = ["ID", "ID do usuário", "ID do jogo", "Data de aluguel", "Data de devolução", "Todas"]
 
         options_filter = []
         for option in options_columns:
@@ -208,6 +211,49 @@ def main(page: Page):
 
         select_view.update()
         page.update()
+
+
+    def insert_inputs_click(e: ControlEvent):
+            
+            if insert_widgets["select_table"].value == "Jogos":
+                insert_widgets["image"].src = "src/ADM/assets/images/pasta_jogos.png"
+                insert_widgets["title_database"].value = "REGISTRO DE JOGO"
+                insert_widgets["input_01"].label = "Nome"
+                insert_widgets["input_02"].label = "Preço"
+                insert_widgets["input_03"].label = "Quantidade"
+                insert_widgets["input_04"].label = "Gênero"
+                insert_widgets["input_05"].label = "descrição"
+
+                insert_widgets["input_01"].visible = True 
+                insert_widgets["input_02"].visible = True               
+                insert_widgets["input_03"].visible = True            
+                insert_widgets["input_04"].visible = True     
+                insert_widgets["input_05"].visible = True
+                insert_widgets["input_06"].visible = False
+                insert_widgets["drop_01"].visible = False
+                insert_widgets["drop_02"].visible = False
+
+            elif insert_widgets["select_table"].value == "Usuários":
+                insert_widgets["image"].src = "src/ADM/assets/images/pasta_usuarios.png"
+                insert_widgets["title_database"].value = "REGISTRO DE USUÁRIO"
+                insert_widgets["input_01"].label = "Nome"
+                insert_widgets["input_02"].label = "email"
+                insert_widgets["input_03"].label = "senha"
+                insert_widgets["drop_01"].label = "Admin"
+                insert_widgets["drop_02"].label = "Status"
+                
+                insert_widgets["input_01"].visible = True 
+                insert_widgets["input_02"].visible = True               
+                insert_widgets["input_03"].visible = True            
+                insert_widgets["input_04"].visible = False    
+                insert_widgets["input_05"].visible = False
+                insert_widgets["input_06"].visible = False
+                insert_widgets["drop_01"].visible = True
+                insert_widgets["drop_02"].visible = True
+
+            insert_widgets.update()
+            page.update()
+
 
 
     ### WIDGETS DO APLICATIVO ###
@@ -240,16 +286,17 @@ def main(page: Page):
         "text_logout": ft.TextButton(icon=ft.Icons.EXIT_TO_APP, text="SAIR DA CONTA", col=3, style=ft.ButtonStyle(color=ft.Colors.WHITE), icon_color=ft.Colors.WHITE, on_click=go_to_login_click),
         "select_operations": ft.Dropdown(
             options=[
-                ft.DropdownOption(key="INSERIR", content= ft.Text("INSERIR", color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD)), 
-                ft.DropdownOption(key = "CONSULTAR", content= ft.Text("CONSULTAR", color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD)), 
-                ft.DropdownOption(key = "ATUALIZAR", content= ft.Text("ATUALIZAR", color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD)), 
-                ft.DropdownOption(key = "DELETAR", content= ft.Text("DELETAR", color=ft.Colors.BLACK, weight=ft.FontWeight.BOLD))
+                ft.DropdownOption(key="INSERIR", content= ft.Text("INSERIR", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)), 
+                ft.DropdownOption(key = "CONSULTAR", content= ft.Text("CONSULTAR", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)), 
+                ft.DropdownOption(key = "ATUALIZAR", content= ft.Text("ATUALIZAR", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)), 
+                ft.DropdownOption(key = "DELETAR", content= ft.Text("DELETAR", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD))
             ],
             col=3,
             value="CONSULTAR",
             border_color=ft.Colors.WHITE,
-            border_width=3,
-            bgcolor=ft.Colors.WHITE,
+            border_width=2,
+            bgcolor="#6100b5",
+            on_change=go_to_operations_click,
             text_style=ft.TextStyle(color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD),
             
         ),    
@@ -270,7 +317,7 @@ def main(page: Page):
             width=150,
             value="Usuários",
             border_color=ft.Colors.PURPLE_200,
-            border_width=1,
+            border_width=2,
             on_change=select_columns_click          
         ),
         "select_filter": ft.Dropdown(
@@ -284,7 +331,7 @@ def main(page: Page):
             ], 
             value="Todas", 
             border_color=ft.Colors.PURPLE_200, 
-            border_width=1, 
+            border_width=2, 
             width=150,
             on_change=select_add_filter_click
         ),
@@ -295,13 +342,65 @@ def main(page: Page):
             ],
             label="Filtro", 
             border_color=ft.Colors.PURPLE_200, 
-            border_width=1, 
+            border_width=2, 
             width=150, 
             visible=False
         )
         
     }
 
+    insert_widgets = {
+        "image": ft.Image(src="src/ADM/assets/images/pasta_jogos.png", fit=ft.ImageFit.COVER, width=200, height=200),
+        "title_database": ft.Text(value="REGISTRO DE JOGO", size=30, style=ft.TextStyle(font_family="LilitaOne-Regular",color=ft.Colors.PURPLE_300)),
+        "select_table": ft.Dropdown(
+            options=[
+                ft.DropdownOption(key="Usuários", content=ft.Text("Usuários", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)),
+                ft.DropdownOption(key="Jogos", content=ft.Text("Jogos", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)),
+                ft.DropdownOption(key="Aluguéis", content=ft.Text("Aluguéis", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD))
+            ],
+            value="Jogos",
+            border_color=ft.Colors.PURPLE_300,
+            on_change=insert_inputs_click,
+            border_width=2, 
+            width=150
+        ),
+        "input_01": ft.TextField(label="Nome",width=300, border_color=ft.Colors.PURPLE_500, border_width=2, visible=True),
+        "input_02": ft.TextField(label="Preço", width=300, border_color=ft.Colors.PURPLE_500, border_width=2, visible= True),
+        "input_03": ft.TextField(label="Quantidade", width=300, border_color=ft.Colors.PURPLE_500, border_width=2, visible= True),
+        "input_04": ft.TextField(label="Gênero",width=300, border_color=ft.Colors.PURPLE_500, border_width=2, visible= True),
+        "input_05": ft.TextField(label="Descrição",width=300, border_color=ft.Colors.PURPLE_500, border_width=2, visible= True),
+        "input_06": ft.TextField(width=300, border_color=ft.Colors.PURPLE_500, border_width=2, visible= False),
+        "drop_01": ft.Dropdown(
+            options=[
+                ft.DropdownOption(key="True", content=ft.Text(value="True", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)),
+                ft.DropdownOption(key="False", content=ft.Text(value="False", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD))
+            ],
+            visible=False,
+            width=300,
+            border_color=ft.Colors.PURPLE_500,
+            border_width=2
+        ),
+        "drop_02": ft.Dropdown(
+            options=[
+                ft.DropdownOption(key="True", content=ft.Text(value="True", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)),
+                ft.DropdownOption(key="False", content=ft.Text(value="False", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD))
+            ],
+            visible=False,
+            width=300,
+            border_color=ft.Colors.PURPLE_500,
+            border_width=2
+        ),
+        "button_insert": ft.ElevatedButton(
+            text="INSERIR", 
+            icon=ft.Icons.CHECK,
+            width=150,
+            style=ft.ButtonStyle(
+                bgcolor=ft.Colors.PURPLE_600,
+                icon_color=ft.Colors.WHITE,
+                color=ft.Colors.WHITE
+            )
+        )
+    }
 
 
     ### WIDGETS DINÂMICOS ###
@@ -480,6 +579,52 @@ def main(page: Page):
                         ]
                     )
                 )      
+            ]
+        )
+    )
+
+    insert_view = ft.Container(
+        content=ft.ResponsiveRow(
+            controls=[
+                ft.Container(
+                    content=home_bar
+                ),
+
+                ft.Container(
+                    col=6,
+                    height=600,
+                    padding=ft.Padding(right=5, left=40, top=40, bottom=40),
+                    content=ft.Column(
+                        alignment=ft.MainAxisAlignment.CENTER,
+                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                        controls=[
+                            insert_widgets["image"],
+                            insert_widgets["title_database"]
+                        ]
+                    )
+                ),
+
+                ft.Container(
+                    col=6,
+                    height=600,
+                    padding=ft.Padding(right=40, left=5, top=40, bottom=40),
+                    content=ft.Column(
+                        alignment=ft.MainAxisAlignment.CENTER,
+                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                        controls=[
+                            insert_widgets["select_table"],
+                            insert_widgets["input_01"],
+                            insert_widgets["input_02"],
+                            insert_widgets["input_03"],
+                            insert_widgets["input_04"],
+                            insert_widgets["input_05"],
+                            insert_widgets["drop_01"],
+                            insert_widgets["drop_02"],
+                            insert_widgets["button_insert"]
+                        ]
+                    )
+                )
+
             ]
         )
     )

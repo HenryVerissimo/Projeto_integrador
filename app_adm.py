@@ -22,6 +22,29 @@ def main(page: Page):
     }
 
 
+    ### ENTER AUTOMÁTICO PARA BOTÕES ###
+
+    def key_press_click(e: ControlEvent):
+
+        if page.controls[0] == login_view:
+            if e.key == "Enter":
+                login_user_click(e)
+
+        elif page.controls[0] == create_account_view:
+            if e.key == "Enter":
+                create_user_click(e)
+
+        elif page.controls[0] == select_view:
+            if e.key == "Enter":
+                select_results_click(e)
+
+        elif page.controls[0] == insert_view:
+            if e.key == "Enter":
+                insert_data_click(e)
+
+    page.on_keyboard_event = key_press_click
+
+
 
     ### FUNÇÕES DE TROCA DE PÁGINAS ###
 
@@ -46,7 +69,6 @@ def main(page: Page):
         page.update()
 
     def go_to_operations_click(e: ControlEvent):
-
         page.controls.clear()
 
         if home_bar_widgets["select_operations"].value == "CONSULTAR":
@@ -174,6 +196,7 @@ def main(page: Page):
     def select_columns_click(e: ControlEvent):
 
         select_widgets["select_filter"].value = "Todas"
+        select_widgets["input_filter"].value = ""
         select_widgets["input_filter"].visible = False
         select_widgets["select_status_or_admin"].visible = False
 
@@ -196,6 +219,8 @@ def main(page: Page):
 
 
     def select_add_filter_click(e: ControlEvent):
+
+        select_widgets["input_filter"].value = ""
 
         if select_widgets["select_filter"].value == "Todas":
             select_widgets["input_filter"].visible = False
@@ -303,7 +328,7 @@ def main(page: Page):
         "text_login": ft.Text(value="LOGIN DE USUÁRIO", size=30, text_align=ft.TextAlign.CENTER, style=ft.TextStyle(font_family="LilitaOne-Regular", color=ft.Colors.PURPLE_300)),
         "user_email": ft.TextField(label="Email", width=300, border_color=ft.Colors.PURPLE_200),
         "user_password": ft.TextField(label="Senha", width=300, password=True, border_color=ft.Colors.PURPLE_200),
-        "button_login": ft.Button(text="ENTRAR NA CONTA", width=300, on_click=login_user_click, color="#180030", bgcolor=ft.Colors.PURPLE_200),
+        "button_login": ft.Button(text="ENTRAR NA CONTA", width=300, on_click=login_user_click, color="#180030", bgcolor=ft.Colors.PURPLE_200, autofocus=True),
         "button_create_account": ft.TextButton(text="Criar uma nova conta", style=ft.ButtonStyle(color=ft.Colors.PURPLE_100), on_click=go_to_create_click),
         "text_error": ft.Text(value="", visible=False, text_align=ft.TextAlign.CENTER)
     }

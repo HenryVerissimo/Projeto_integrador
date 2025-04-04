@@ -1,6 +1,6 @@
 import flet as ft
 from flet import ControlEvent, Page
-
+from datetime import datetime
 from src.ADM.controllers import CreateUserController, LoginAccountController, SelectController
 
 
@@ -12,7 +12,7 @@ def main(page: Page):
     page.bgcolor = "#160f1c"
     page.window.width = 1280
     page.window.height = 720
-    page.window.min_width = 880
+    page.window.min_width = 940
     page.window.min_height = 700
     page.padding = 0
     page.scroll = ft.ScrollMode.AUTO
@@ -230,6 +230,7 @@ def main(page: Page):
                 insert_widgets["input_04"].visible = True     
                 insert_widgets["input_05"].visible = True
                 insert_widgets["input_06"].visible = False
+                insert_widgets["button_date"].visible = False
                 insert_widgets["drop_01"].visible = False
                 insert_widgets["drop_02"].visible = False
 
@@ -240,7 +241,6 @@ def main(page: Page):
                 insert_widgets["input_02"].label = "email"
                 insert_widgets["input_03"].label = "senha"
                 insert_widgets["drop_01"].label = "Admin"
-                insert_widgets["drop_02"].label = "Status"
                 
                 insert_widgets["input_01"].visible = True 
                 insert_widgets["input_02"].visible = True               
@@ -248,12 +248,52 @@ def main(page: Page):
                 insert_widgets["input_04"].visible = False    
                 insert_widgets["input_05"].visible = False
                 insert_widgets["input_06"].visible = False
+                insert_widgets["button_date"].visible = False
                 insert_widgets["drop_01"].visible = True
-                insert_widgets["drop_02"].visible = True
+                insert_widgets["drop_02"].visible = False
+
+            elif insert_widgets["select_table"].value == "Aluguéis":
+                insert_widgets["image"].src = "src/ADM/assets/images/pasta_alugueis.png"
+                insert_widgets["title_database"].value = "REGISTRO DE ALUGUEL"
+                insert_widgets["input_01"].label = "ID do usuário"
+                insert_widgets["input_02"].label = "ID do jogo"
+                insert_widgets["input_06"].label = "Data de devolução"
+
+                insert_widgets["input_01"].visible = True
+                insert_widgets["input_02"].visible = True
+                insert_widgets["input_03"].visible = False
+                insert_widgets["input_04"].visible = False
+                insert_widgets["input_05"].visible = False
+                insert_widgets["input_06"].visible = True
+                insert_widgets["drop_01"].visible = False
+                insert_widgets["drop_02"].visible = False
+                insert_widgets["button_date"].visible = True
+                insert_widgets["button_insert"].visible = True
+
 
             insert_widgets.update()
             page.update()
 
+
+    def insert_date_click(e: ControlEvent):
+        formatted_date = e.control.value.strftime("%d/%m/%Y")
+        insert_widgets["input_06"].value = formatted_date
+        page.update()
+
+    
+    def insert_data_click(e: ControlEvent):
+
+        if insert_widgets["select_table"].value == "Jogos":
+
+            pass
+
+        elif insert_widgets["select_table"].value == "Usuários":
+
+            pass
+
+        elif insert_widgets["select_table"].value == "Aluguéis":
+
+            pass
 
 
     ### WIDGETS DO APLICATIVO ###
@@ -370,6 +410,18 @@ def main(page: Page):
         "input_04": ft.TextField(label="Gênero",width=300, border_color=ft.Colors.PURPLE_500, border_width=2, visible= True),
         "input_05": ft.TextField(label="Descrição",width=300, border_color=ft.Colors.PURPLE_500, border_width=2, visible= True),
         "input_06": ft.TextField(width=300, border_color=ft.Colors.PURPLE_500, border_width=2, visible= False),
+        "button_date": ft.IconButton(
+            on_click=lambda e: page.open(
+                ft.DatePicker(
+                    first_date= datetime.now().date(),
+                    last_date= datetime(year=2050, month=12, day=31),
+                    on_change=insert_date_click
+
+                )
+            ),
+            icon=ft.Icons.DATE_RANGE,
+            icon_color=ft.Colors.PURPLE_300,
+            visible= False),
         "drop_01": ft.Dropdown(
             options=[
                 ft.DropdownOption(key="True", content=ft.Text(value="True", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)),
@@ -593,7 +645,7 @@ def main(page: Page):
                 ft.Container(
                     col=6,
                     height=600,
-                    padding=ft.Padding(right=5, left=40, top=40, bottom=40),
+                    padding=ft.Padding(right=0, left=40, top=40, bottom=40),
                     content=ft.Column(
                         alignment=ft.MainAxisAlignment.CENTER,
                         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
@@ -607,7 +659,7 @@ def main(page: Page):
                 ft.Container(
                     col=6,
                     height=600,
-                    padding=ft.Padding(right=40, left=5, top=40, bottom=40),
+                    padding=ft.Padding(right=40, left=0, top=40, bottom=40),
                     content=ft.Column(
                         alignment=ft.MainAxisAlignment.CENTER,
                         horizontal_alignment=ft.CrossAxisAlignment.CENTER,
@@ -620,6 +672,16 @@ def main(page: Page):
                             insert_widgets["input_05"],
                             insert_widgets["drop_01"],
                             insert_widgets["drop_02"],
+                            ft.Container(
+                                margin=ft.margin.only(left=50),
+                                content=ft.Row(
+                                    alignment=ft.MainAxisAlignment.CENTER,
+                                    controls=[
+                                        insert_widgets["input_06"],
+                                        insert_widgets["button_date"]
+                                    ]
+                                )
+                            ),
                             insert_widgets["button_insert"]
                         ]
                     )

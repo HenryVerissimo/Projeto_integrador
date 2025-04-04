@@ -1,11 +1,11 @@
 from flask import Flask
 
-from src.routes.home import HomeBlueprint
-from src.routes.login import LoginBlueprint
+from src.WEB.routes.home import HomeBlueprint
+from src.WEB.routes.login import LoginBlueprint
 
 class MyApplication:
     def __init__(self):
-        self.app = Flask(__name__, template_folder="src/templates", static_folder="src/static")
+        self.app = Flask(__name__, template_folder="src/WEB/templates", static_folder="src/WEB/static")
         self.build_blueprints()
 
     def build_blueprints(self):

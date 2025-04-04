@@ -1,7 +1,7 @@
-from src.model.repository import UsersRepository, GameRentalRepository, GamesRepository
+from src.WEB.model.repository import UsersRepository, GameRentalRepository, GamesRepository
 from abc import ABC, abstractmethod
-from src.model.config import ConnectionMysqlDB
-from src.model.entities import Users, Games, GameRental
+from src.WEB.model.config import ConnectionMysqlDB
+from src.WEB.model.entities import Users, Games, GameRental
 from datetime import datetime
 
 

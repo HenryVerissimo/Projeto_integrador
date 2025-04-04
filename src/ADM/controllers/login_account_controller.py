@@ -1,6 +1,6 @@
-from src.model.repository import UsersRepository
-from src.model.config import ConnectionMysqlDB
-from src.model.entities import Users
+from src.WEB.model.repository import UsersRepository
+from src.WEB.model.config import ConnectionMysqlDB
+from src.WEB.model.entities import Users
 
 
 class LoginAccountController:

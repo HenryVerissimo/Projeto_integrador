@@ -1,5 +1,5 @@
-from src.model import ConnectionInterfaceDB
-from src.model import Users
+from src.WEB.model import ConnectionInterfaceDB
+from src.WEB.model import Users
 
 
 class UsersRepository:

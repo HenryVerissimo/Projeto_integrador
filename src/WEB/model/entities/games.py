@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, DECIMAL, Text
-from src.model import Base
+from src.WEB.model import Base
 
 
 

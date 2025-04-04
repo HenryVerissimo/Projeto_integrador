@@ -1,5 +1,5 @@
-from src.model.repository import UsersRepository
-from src.model.config import ConnectionMysqlDB
+from src.WEB.model.repository import UsersRepository
+from src.WEB.model.config import ConnectionMysqlDB
 
 class CreateUserController:
 

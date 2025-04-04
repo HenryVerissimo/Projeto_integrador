@@ -1,4 +1,4 @@
-from src.model import GameRental
+from src.WEB.model import GameRental
 
 
 class GameRentalRepository:

@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, ForeignKey, DateTime, func, Date
-from src.model import Base
+from src.WEB.model import Base
 
 class GameRental(Base):
     __tablename__ = "game_rental"

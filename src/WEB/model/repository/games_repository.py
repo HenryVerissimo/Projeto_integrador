@@ -1,5 +1,5 @@
-from src.model import ConnectionInterfaceDB
-from src.model import Games
+from src.WEB.model import ConnectionInterfaceDB
+from src.WEB.model import Games
 
 class GamesRepository:
     def __init__(self, connection:ConnectionInterfaceDB) -> None:

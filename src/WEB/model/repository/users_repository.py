@@ -7,10 +7,10 @@ class UsersRepository:
         self.__connection_db = connection
 
 
-    def insert(self, name:str, email:str, password:str, admin:bool = False) -> bool:
+    def insert(self, name:str, email:str, password:str, admin:bool = False, status:bool = True) -> bool:
         with self.__connection_db as connection:
             try:
-                new_user = Users(user_name=name, user_email=email, user_password=password, user_admin=admin)
+                new_user = Users(user_name=name, user_email=email, user_password=password, user_admin=admin, user_status=status)
                 connection.session.add(new_user)
                 connection.session.commit()
                 return new_user

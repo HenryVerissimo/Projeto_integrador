@@ -250,6 +250,15 @@ def main(page: Page):
 
     def insert_inputs_click(e: ControlEvent):
             
+            insert_widgets["input_01"].value = ""
+            insert_widgets["input_02"].value = ""
+            insert_widgets["input_03"].value = ""
+            insert_widgets["input_04"].value = ""
+            insert_widgets["input_05"].value = ""
+            insert_widgets["input_06"].value = ""
+            insert_widgets["text_insert"].value = ""
+
+            
             if insert_widgets["select_table"].value == "Jogos":
                 insert_widgets["image"].src = "src/ADM/assets/images/pasta_jogos.png"
                 insert_widgets["title_database"].value = "REGISTRO DE JOGO"
@@ -258,6 +267,9 @@ def main(page: Page):
                 insert_widgets["input_03"].label = "Quantidade"
                 insert_widgets["input_04"].label = "Gênero"
                 insert_widgets["input_05"].label = "descrição"
+
+                insert_widgets["input_03"].password = False
+                insert_widgets["input_04"].password = False
 
                 insert_widgets["input_01"].visible = True 
                 insert_widgets["input_02"].visible = True               
@@ -275,13 +287,17 @@ def main(page: Page):
                 insert_widgets["title_database"].value = "REGISTRO DE USUÁRIO"
                 insert_widgets["input_01"].label = "Nome"
                 insert_widgets["input_02"].label = "email"
-                insert_widgets["input_03"].label = "senha"
+                insert_widgets["input_03"].label = "senha"         
+                insert_widgets["input_04"].label = "Confirmar senha"       
                 insert_widgets["drop_01"].label = "Admin"
-                
+
+                insert_widgets["input_03"].password = True
+                insert_widgets["input_04"].password = True
+
                 insert_widgets["input_01"].visible = True 
                 insert_widgets["input_02"].visible = True               
                 insert_widgets["input_03"].visible = True            
-                insert_widgets["input_04"].visible = False    
+                insert_widgets["input_04"].visible = True   
                 insert_widgets["input_05"].visible = False
                 insert_widgets["input_06"].visible = False
                 insert_widgets["button_date"].visible = False
@@ -347,10 +363,30 @@ def main(page: Page):
             page.update()
 
 
-
         elif insert_widgets["select_table"].value == "Usuários":
+            name = insert_widgets["input_01"].value
+            email = insert_widgets["input_02"].value
+            password = insert_widgets["input_03"].value
+            confirm_password = insert_widgets["input_04"].value
+            admin = insert_widgets["drop_01"].value
 
-            pass
+            request = InsertController().insert_user(name=name, email=email, password=password, confirm_password=confirm_password, admin=admin)
+
+            if request["status"] == "error":
+                insert_widgets["text_insert"].value = request["message"]
+                insert_widgets["text_insert"].visible = True
+                page.update()
+                return None
+
+            insert_widgets["text_insert"].value = request["message"]
+            insert_widgets["text_insert"].visible = True
+            insert_widgets["input_01"].value = ""
+            insert_widgets["input_02"].value = ""
+            insert_widgets["input_03"].value = ""
+            insert_widgets["input_04"].value = ""
+            insert_widgets["drop_01"].value = ""
+
+            page.update()
 
         elif insert_widgets["select_table"].value == "Aluguéis":
 

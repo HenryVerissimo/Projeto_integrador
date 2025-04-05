@@ -1,26 +1,36 @@
 import flet as ft
 from flet import ControlEvent, Page
 from datetime import datetime
-from src.ADM.controllers import CreateUserController, LoginAccountController, SelectController
+from src.ADM.controllers import CreateUserController, LoginAccountController, SelectController, InsertController
 
 
 def main(page: Page):
     
     ### CONFIGURAÇÕES DE PÁGINA ###
 
-    page.title = "App ADM - GameOver"
-    page.bgcolor = "#160f1c"
-    page.window.width = 1280
-    page.window.height = 720
-    page.window.min_width = 940
-    page.window.min_height = 700
-    page.padding = 0
-    page.scroll = ft.ScrollMode.AUTO
-    page.theme_mode = ft.ThemeMode.DARK
-    page.fonts = {
-        "LilitaOne-Regular": "src/ADM/assets/fonts/LilitaOne-Regular.ttf"
-    }
+    def page_config(page: Page):
+        page.title = "App ADM - GameOver"
+        page.bgcolor = "#160f1c"
+        page.window.min_width = 940
+        page.window.min_height = 700
+        page.window.full_screen = False
+        page.padding = 0
+        page.scroll = ft.ScrollMode.AUTO
+        page.theme_mode = ft.ThemeMode.DARK
+        page.fonts = {
+            "LilitaOne-Regular": "src/ADM/assets/fonts/LilitaOne-Regular.ttf"
+        }
 
+    def restart_window(page: Page) -> None:
+        if page.width < 940 or page.height < 700:
+            page.window.width = 940
+            page.window.height = 700
+            page.update()
+
+    page_config(page)
+    page.on_resized = lambda e: restart_window(page)
+
+    
 
     ### ENTER AUTOMÁTICO PARA BOTÕES ###
 
@@ -40,7 +50,7 @@ def main(page: Page):
 
         elif page.controls[0] == insert_view:
             if e.key == "Enter":
-                insert_data_click(e)
+                insert_database_click(e)
 
     page.on_keyboard_event = key_press_click
 
@@ -258,6 +268,7 @@ def main(page: Page):
                 insert_widgets["button_date"].visible = False
                 insert_widgets["drop_01"].visible = False
                 insert_widgets["drop_02"].visible = False
+                insert_widgets["text_insert"].visible = False
 
             elif insert_widgets["select_table"].value == "Usuários":
                 insert_widgets["image"].src = "src/ADM/assets/images/pasta_usuarios.png"
@@ -276,6 +287,7 @@ def main(page: Page):
                 insert_widgets["button_date"].visible = False
                 insert_widgets["drop_01"].visible = True
                 insert_widgets["drop_02"].visible = False
+                insert_widgets["text_insert"].visible = False
 
             elif insert_widgets["select_table"].value == "Aluguéis":
                 insert_widgets["image"].src = "src/ADM/assets/images/pasta_alugueis.png"
@@ -294,6 +306,7 @@ def main(page: Page):
                 insert_widgets["drop_02"].visible = False
                 insert_widgets["button_date"].visible = True
                 insert_widgets["button_insert"].visible = True
+                insert_widgets["text_insert"].visible = False
 
 
             insert_widgets.update()
@@ -306,11 +319,34 @@ def main(page: Page):
         page.update()
 
     
-    def insert_data_click(e: ControlEvent):
+    def insert_database_click(e: ControlEvent):
 
         if insert_widgets["select_table"].value == "Jogos":
+            name = insert_widgets["input_01"].value
+            price = insert_widgets["input_02"].value
+            quantity = insert_widgets["input_03"].value
+            genre = insert_widgets["input_04"].value
+            description = insert_widgets["input_05"].value
 
-            pass
+            request = InsertController().insert_game(name=name, price=price, quantity=quantity, genre=genre, description=description)
+
+            if request["status"] == "error":
+                insert_widgets["text_insert"].value = request["message"]
+                insert_widgets["text_insert"].visible = True
+                page.update()
+                return None
+            
+            insert_widgets["text_insert"].value = request["message"]
+            insert_widgets["text_insert"].visible = True
+            insert_widgets["input_01"].value = ""
+            insert_widgets["input_02"].value = ""
+            insert_widgets["input_03"].value = ""
+            insert_widgets["input_04"].value = ""
+            insert_widgets["input_05"].value = ""
+
+            page.update()
+
+
 
         elif insert_widgets["select_table"].value == "Usuários":
 
@@ -435,6 +471,7 @@ def main(page: Page):
         "input_04": ft.TextField(label="Gênero",width=300, border_color=ft.Colors.PURPLE_500, border_width=2, visible= True),
         "input_05": ft.TextField(label="Descrição",width=300, border_color=ft.Colors.PURPLE_500, border_width=2, visible= True),
         "input_06": ft.TextField(width=300, border_color=ft.Colors.PURPLE_500, border_width=2, visible= False),
+        "text_insert": ft.Text(value="", visible=False, color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD),
         "button_date": ft.IconButton(
             on_click=lambda e: page.open(
                 ft.DatePicker(
@@ -471,10 +508,11 @@ def main(page: Page):
             text="INSERIR", 
             icon=ft.Icons.CHECK,
             width=150,
+            on_click=insert_database_click,
             style=ft.ButtonStyle(
                 bgcolor=ft.Colors.PURPLE_600,
                 icon_color=ft.Colors.WHITE,
-                color=ft.Colors.WHITE
+                color=ft.Colors.WHITE,
             )
         )
     }
@@ -595,9 +633,9 @@ def main(page: Page):
     )
 
     select_view = ft.Container(
-        content=ft.Column(
+        content=ft.ResponsiveRow(
             alignment=ft.MainAxisAlignment.CENTER,
-            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            vertical_alignment=ft.CrossAxisAlignment.CENTER,
             controls=[
                 ft.Container(
                     content=home_bar
@@ -624,8 +662,7 @@ def main(page: Page):
                 ),
 
                 ft.Container(
-                    width=700,
-                    expand=True,
+                    col={"sm": 12, "md": 11, "lg": 10, "xl": 9},
                     bgcolor="#9c57f7",
                     margin=ft.margin.all(40),
                     border_radius=10,
@@ -635,7 +672,8 @@ def main(page: Page):
                             ft.Container(
                                 bgcolor="#8944e3",
                                 padding=ft.padding.all(10),
-                                content=ft.ResponsiveRow(
+                                content=ft.Row(
+                                    alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                                     vertical_alignment=ft.CrossAxisAlignment.CENTER,
                                     controls=[
                                         select_widgets["title_database"],
@@ -645,14 +683,13 @@ def main(page: Page):
                             ),
                             ft.Container(
                                 padding=ft.padding.all(30),
-                                content=ft.Column(
+                                content=ft.ResponsiveRow(
                                     controls=[
                                         select_results
                                     ]
                                 )
                             ),
                             create_account_widgets["text_error"],
-
                         ]
                     )
                 )      
@@ -707,7 +744,8 @@ def main(page: Page):
                                     ]
                                 )
                             ),
-                            insert_widgets["button_insert"]
+                            insert_widgets["button_insert"],
+                            insert_widgets["text_insert"],
                         ]
                     )
                 )
@@ -726,4 +764,4 @@ def main(page: Page):
 if __name__ == "__main__":
 
     app = ft.app(target=main, assets_dir="src/ADM/assets")
-    
+

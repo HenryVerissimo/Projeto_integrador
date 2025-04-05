@@ -144,10 +144,10 @@ class SelectController(ABC):
         if isinstance(request, list):
 
             for game in request:
-                response.append({"id": f"{game.game_id}", "name": f"{game.game_name}", "price": f"{game.game_price}", "quantity": f"{game.game_quantity}", "genre": f"{game.game_genre}"})
+                response.append({"id": f"{game.game_id}", "name": f"{game.game_name}", "price": f"{game.game_price}", "quantity": f"{game.game_quantity}", "genre": f"{game.game_genre}", "description": f"{game.game_description}"})
 
         elif isinstance(request, Games):
-            response.append({"id": f"{request.game_id}", "name": f"{request.game_name}", "price": f"{request.game_price}", "quantity": f"{request.game_quantity}", "genre": f"{request.game_genre}"})
+            response.append({"id": f"{request.game_id}", "name": f"{request.game_name}", "price": f"{request.game_price}", "quantity": f"{request.game_quantity}", "genre": f"{request.game_genre}", "description": f"{request.game_description}"})
         
         return {"status": "success", "response": response, "message": "Jogos encontrados com sucesso!"}
     

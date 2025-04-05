@@ -1,13 +1,13 @@
-from sqlalchemy import Column, Integer, ForeignKey, DateTime, func, Date
+from sqlalchemy import Column, Integer, ForeignKey, func, Date
 from src.WEB.model import Base
 
 class GameRental(Base):
     __tablename__ = "game_rental"
 
     game_rental_id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey("jogos.id"))
-    game_id = Column(Integer, ForeignKey("usuarios.id"))
-    game_rental_date = Column(DateTime, default=func.current_timestamp())
+    user_id = Column(Integer, ForeignKey("games.game_id"))
+    game_id = Column(Integer, ForeignKey("users.user_id"))
+    game_rental_date = Column(Date)
     game_return_date = Column(Date)
 
     def __repr__(self):

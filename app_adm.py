@@ -389,8 +389,25 @@ def main(page: Page):
             page.update()
 
         elif insert_widgets["select_table"].value == "Aluguéis":
+            user_id = insert_widgets["input_01"].value
+            game_id = insert_widgets["input_02"].value
+            date_return = insert_widgets["input_06"].value
 
-            pass
+            request = InsertController().insert_game_rental(user_id=user_id, game_id=game_id, date_return=date_return)
+
+            if request["status"] == "error":
+                insert_widgets["text_insert"].value = request["message"]
+                insert_widgets["text_insert"].visible = True
+                page.update()
+                return None
+
+            insert_widgets["text_insert"].value = request["message"]
+            insert_widgets["text_insert"].visible = True
+            insert_widgets["input_01"].value = ""
+            insert_widgets["input_02"].value = ""
+            insert_widgets["input_06"].value = ""
+
+            page.update()
 
 
     ### WIDGETS DO APLICATIVO ###

@@ -15,7 +15,7 @@ class LoginAccountController:
         elif user is None:
             response = {"status": "error", "message": "Erro ao tentar logar na conta!"}
 
-        elif user is False or not self.__validate_password(password, user):
+        elif user is False or not self.__validate_password(password, user) or not self._validate_user_status(user):
             response = {"status": "error", "message": "Email ou senha incorretos!"}
 
         else:
@@ -36,4 +36,7 @@ class LoginAccountController:
             return False
         
         return True
+    
+    def _validate_user_status(self, user: Users) -> bool:
+        return not user.user_status
         

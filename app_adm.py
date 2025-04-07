@@ -980,7 +980,7 @@ def main(page: Page):
             
     ### CONFIGURA A PÁGINA INICIAL PADRÃO ###
 
-    page.add(update_view)
+    page.add(login_view)
     page.update()  
 
 if __name__ == "__main__":

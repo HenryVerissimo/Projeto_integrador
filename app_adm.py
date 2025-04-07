@@ -87,6 +87,9 @@ def main(page: Page):
         if home_bar_widgets["select_operations"].value == "INSERIR":
             page.add(insert_view)
 
+        if home_bar_widgets["select_operations"].value == "ATUALIZAR":
+            page.add(update_view)
+
         page.update()
 
 
@@ -536,7 +539,8 @@ def main(page: Page):
             ),
             icon=ft.Icons.DATE_RANGE,
             icon_color=ft.Colors.PURPLE_300,
-            visible= False),
+            visible= False
+        ),
         "drop_01": ft.Dropdown(
             options=[
                 ft.DropdownOption(key="True", content=ft.Text(value="True", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)),
@@ -568,6 +572,99 @@ def main(page: Page):
                 color=ft.Colors.WHITE,
             )
         )
+    }
+
+    update_widgets = {
+        "image": ft.Image(src="src/ADM/assets/images/pasta_update.png", width=200, height=200),
+        "title": ft.Text(value="ATUALIZAR DADOS", size=30, style=ft.TextStyle(font_family="LilitaOne-Regular",color=ft.Colors.PURPLE_300)),
+        "update_table": ft.Dropdown(
+            options=[
+                ft.DropdownOption(key="Usuários", content=ft.Text("Usuários", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)),
+                ft.DropdownOption(key="Jogos", content=ft.Text("Jogos", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)),
+                ft.DropdownOption(key="Aluguéis", content=ft.Text("Aluguéis", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD))
+            ],
+            value="Jogos",
+            width=150,
+            border_color=ft.Colors.PURPLE_300,
+            border_width=2
+        ),
+        "update_column": ft.Dropdown(
+            options=[
+                ft.DropdownOption(key="ID", content=ft.Text("ID", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)),
+                ft.DropdownOption(key="Nome", content=ft.Text("Nome", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)),
+                ft.DropdownOption(key="Preço", content=ft.Text("Preço", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)),
+                ft.DropdownOption(key="Quantidade", content=ft.Text("Quantidade", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)),
+                ft.DropdownOption(key="Gênero", content=ft.Text("Gênero", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)),
+                ft.DropdownOption(key="Data de aluguel", content=ft.Text("Data de aluguel", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)),
+                ft.DropdownOption(key="Data de devolução", content=ft.Text("Data de devolução", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD))
+            ],
+            value="ID",
+            width=150,
+            border_color=ft.Colors.PURPLE_300,
+            border_width=2
+        ),
+        "update_input_filter": ft.TextField(label="Filtro", width=150, border_color=ft.Colors.PURPLE_300, border_width=2),
+        "update_select_filter": ft.Dropdown(
+            options=[
+                ft.DropdownOption(key="True", content=ft.Text(value="True", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)),
+                ft.DropdownOption(key="False", content=ft.Text(value="False", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD))
+            ],
+            visible=False,
+            width=150,
+            border_color=ft.Colors.PURPLE_300,
+            border_width=2
+        ),
+        "input_01": ft.TextField(label="Nome",width=300, border_color=ft.Colors.PURPLE_500, border_width=2, visible=True),
+        "input_02": ft.TextField(label="Preço", width=300, border_color=ft.Colors.PURPLE_500, border_width=2, visible= True),
+        "input_03": ft.TextField(label="Quantidade", width=300, border_color=ft.Colors.PURPLE_500, border_width=2, visible= True),
+        "input_04": ft.TextField(label="Gênero",width=300, border_color=ft.Colors.PURPLE_500, border_width=2, visible= True),
+        "input_05": ft.TextField(label="Descrição",width=300, border_color=ft.Colors.PURPLE_500, border_width=2, visible= True),
+        "input_06": ft.TextField(width=300, border_color=ft.Colors.PURPLE_500, border_width=2, visible= False),
+        "button_date": ft.IconButton(
+            on_click=lambda e: page.open(
+                ft.DatePicker(
+                    first_date= datetime.now().date(),
+                    last_date= datetime(year=2050, month=12, day=31),
+                    on_change=insert_date_click
+
+                )
+            ),
+            icon=ft.Icons.DATE_RANGE,
+            icon_color=ft.Colors.PURPLE_300,
+            visible= False
+        ),
+        "drop_01": ft.Dropdown(
+            options=[
+                ft.DropdownOption(key="True", content=ft.Text(value="True", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)),
+                ft.DropdownOption(key="False", content=ft.Text(value="False", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD))
+            ],
+            visible=False,
+            width=300,
+            border_color=ft.Colors.PURPLE_500,
+            border_width=2
+        ),
+        "drop_02": ft.Dropdown(
+            options=[
+                ft.DropdownOption(key="True", content=ft.Text(value="True", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)),
+                ft.DropdownOption(key="False", content=ft.Text(value="False", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD))
+            ],
+            visible=False,
+            width=300,
+            border_color=ft.Colors.PURPLE_500,
+            border_width=2
+        ),
+        "button_update": ft.ElevatedButton(
+            text="ATUALIZAR", 
+            icon=ft.Icons.CHECK,
+            width=150,
+            style=ft.ButtonStyle(
+                bgcolor=ft.Colors.PURPLE_600,
+                icon_color=ft.Colors.WHITE,
+                color=ft.Colors.WHITE,
+            )
+        ),
+        "update_text": ft.Text(value="", visible=False, color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)
+
     }
 
 
@@ -806,12 +903,84 @@ def main(page: Page):
             ]
         )
     )
+
+    update_view = ft.Container(
+        content=ft.ResponsiveRow(
+            controls=[
+                ft.Container(
+                    content=home_bar
+                ),
+
+                ft.Container(
+                    col=5,
+                    height=600,
+                    content=ft.Column(
+                        alignment=ft.MainAxisAlignment.CENTER,
+                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                        controls=[
+                            update_widgets["image"],
+                            update_widgets["title"]
+                        ]
+                    )
+                ),
+
+                ft.Container(
+                    col=6,
+                    height=600,
+                    content=ft.Column(
+                        alignment=ft.MainAxisAlignment.CENTER,
+                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,                        
+                        controls=[
+                            ft.Container(
+                                margin=ft.margin.only(bottom=10, top=70),
+                                content=ft.Row(
+                                    alignment=ft.MainAxisAlignment.CENTER,
+                                    controls=[
+                                        update_widgets["update_table"],
+                                        update_widgets["update_column"],
+                                        update_widgets["update_input_filter"],
+                                        update_widgets["update_select_filter"]
+                                    ]
+                                )
+                            ),
+
+                            ft.Container(
+                                content=ft.Column(
+                                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                                    controls=[
+                                        update_widgets["input_01"],
+                                        update_widgets["input_02"],
+                                        update_widgets["input_03"],
+                                        update_widgets["input_04"],
+                                        update_widgets["input_05"],
+                                        update_widgets["drop_01"],
+                                        update_widgets["drop_02"],
+                                        ft.Container(
+                                            content=ft.Row(
+                                                alignment=ft.MainAxisAlignment.CENTER,
+                                                controls=[
+                                                    update_widgets["input_06"],
+                                                    update_widgets["button_date"]
+                                                ]
+                                            )
+                                        ),
+                                        update_widgets["button_update"],
+                                        update_widgets["update_text"]
+                                    ]
+                                )
+                            )
+                        ]
+                    )
+                )
+            ]
+        )
+    )
     
 
             
     ### CONFIGURA A PÁGINA INICIAL PADRÃO ###
 
-    page.add(login_view)
+    page.add(update_view)
     page.update()  
 
 if __name__ == "__main__":

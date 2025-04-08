@@ -76,23 +76,21 @@ class InsertController():
         if self.__validate_string_minimum(password, 5):
             return {"status": "error", "message": "A senha do usuário precisa ter mais de 5 caracteres!"}
         
+        if self.__validate_email_exists(email) == False:
+            return {"status": "error", "message": "Email já cadastrado!"}
+        
+        if self.__validate_email(email):
+            return {"status": "error", "message": "O formato do email é inválido!"}
+        
         name = name.strip()
         email = email.strip()
         password = password.strip()
         if admin == "True":
-            admin = True
+            admin = 1
         else:
-            admin = False
-        
-        repository = UsersRepository(ConnectionMysqlDB())
-        request = repository.select_by_email(email=email)
+            admin = 0
 
-        if request:
-            return {"status": "error", "message": "Email j cadastrado!"}
-        
-        if request is None:
-            return {"status": "error", "message": "Erro ao tentar verificar se email já está cadastrado!"}
-        
+        repository = UsersRepository(ConnectionMysqlDB())
         request = repository.insert(name=name, email=email, password=password, admin=admin)
 
         if not request:
@@ -179,6 +177,25 @@ class InsertController():
         
         except:
             return True
+        
+    def __validate_email(self, email: str) -> bool:
+
+        if email.count("@") != 1 or email.count(".") < 1:
+            return False
+        
+        return True
+    
+    def __validate_email_exists(self, email:str) -> bool:
+
+        request = UsersRepository(ConnectionMysqlDB()).select_by_email(email=email)
+
+        if request is False:
+            return False
+        
+        if request is None:
+            return None
+        
+        return True
         
     def __validate_string_to_integer_conversion(self, data: str) -> bool:
         try:

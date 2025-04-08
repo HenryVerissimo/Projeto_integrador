@@ -1,7 +1,7 @@
 import flet as ft
 from flet import ControlEvent, Page
 from datetime import datetime
-from src.ADM.controllers import CreateUserController, LoginAccountController, SelectController, InsertController
+from src.ADM.controllers import CreateUserController, LoginAccountController, SelectController, InsertController, UpdateController
 
 
 def main(page: Page):
@@ -211,13 +211,14 @@ def main(page: Page):
         select_widgets["select_filter"].value = "Todas"
         select_widgets["input_filter"].value = ""
         select_widgets["input_filter"].visible = False
+        select_widgets["select_status_or_admin"].value = None
         select_widgets["select_status_or_admin"].visible = False
-
+        
         if select_widgets["select_table"].value == "Usuários":
             options_columns = ["ID", "Nome", "Email", "Admin", "Status", "Todas"]
         
         elif select_widgets["select_table"].value == "Jogos":
-            options_columns = ["ID", "Nome", "Preço", "Quantidade", "Genero", "Todas"]
+            options_columns = ["ID", "Nome", "Preço", "Quantidade", "Gênero", "Todas"]
 
         elif select_widgets["select_table"].value == "Aluguéis":
             options_columns = ["ID", "ID do usuário", "ID do jogo", "Data de aluguel", "Data de devolução", "Todas"]
@@ -234,6 +235,7 @@ def main(page: Page):
     def select_add_filter_click(e: ControlEvent):
 
         select_widgets["input_filter"].value = ""
+        select_widgets["select_status_or_admin"].value = None
 
         if select_widgets["select_filter"].value == "Todas":
             select_widgets["input_filter"].visible = False
@@ -259,6 +261,7 @@ def main(page: Page):
             insert_widgets["input_04"].value = ""
             insert_widgets["input_05"].value = ""
             insert_widgets["input_06"].value = ""
+            insert_widgets["drop_01"].value = None
             insert_widgets["text_insert"].value = ""
 
             
@@ -282,7 +285,6 @@ def main(page: Page):
                 insert_widgets["input_06"].visible = False
                 insert_widgets["button_date"].visible = False
                 insert_widgets["drop_01"].visible = False
-                insert_widgets["drop_02"].visible = False
                 insert_widgets["text_insert"].visible = False
 
             elif insert_widgets["select_table"].value == "Usuários":
@@ -305,7 +307,6 @@ def main(page: Page):
                 insert_widgets["input_06"].visible = False
                 insert_widgets["button_date"].visible = False
                 insert_widgets["drop_01"].visible = True
-                insert_widgets["drop_02"].visible = False
                 insert_widgets["text_insert"].visible = False
 
             elif insert_widgets["select_table"].value == "Aluguéis":
@@ -322,7 +323,6 @@ def main(page: Page):
                 insert_widgets["input_05"].visible = False
                 insert_widgets["input_06"].visible = True
                 insert_widgets["drop_01"].visible = False
-                insert_widgets["drop_02"].visible = False
                 insert_widgets["button_date"].visible = True
                 insert_widgets["button_insert"].visible = True
                 insert_widgets["text_insert"].visible = False
@@ -411,6 +411,230 @@ def main(page: Page):
             insert_widgets["input_06"].value = ""
 
             page.update()
+    
+    def update_columns_click(e: ControlEvent):
+
+        update_widgets["update_column"].value = "ID"
+        update_widgets["update_input_filter"].value = ""
+
+        if update_widgets["update_table"].value == "Usuários":
+            options_columns = ["ID", "Nome", "Email", "Senha", "Admin", "Status"]
+        
+        elif update_widgets["update_table"].value == "Jogos":
+            options_columns = ["ID", "Nome", "Preço", "Quantidade", "Gênero"]
+
+        elif update_widgets["update_table"].value == "Aluguéis":
+            options_columns = ["ID", "ID do usuário", "ID do jogo", "Data de aluguel", "Data de devolução"]
+
+        options_filter = []
+        for option in options_columns:
+            options_filter.append(ft.DropdownOption(key=option, content=ft.Text(value=option, color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)))
+
+        update_widgets["update_column"].options = options_filter
+        update_inputs_click(e)
+        update_view.update()
+        page.update()
+
+    def update_add_filter_click(e: ControlEvent):
+
+        update_widgets["update_input_filter"].value = ""
+        update_widgets["update_select_filter"].value = None
+        update_widgets["update_text"].value = ""
+        update_widgets["update_text"].visible = False
+
+        if update_widgets["update_column"].value == "Admin" or update_widgets["update_column"].value == "Status":
+            update_widgets["update_input_filter"].visible = False
+            update_widgets["update_select_filter"].visible = True
+        
+        else:
+            update_widgets["update_input_filter"].visible = True
+            update_widgets["update_select_filter"].visible = False
+        
+
+        update_view.update()
+        page.update()
+
+    def update_inputs_click(e: ControlEvent):
+
+        update_widgets["input_01"].value = ""
+        update_widgets["input_02"].value = ""
+        update_widgets["input_03"].value = ""
+        update_widgets["input_04"].value = ""
+        update_widgets["input_05"].value = ""
+        update_widgets["input_06"].value = ""
+        update_widgets["input_07"].value = ""
+        update_widgets["drop_01"].value = None
+        update_widgets["drop_02"].value = None
+        update_widgets["update_text"].value = ""
+        update_widgets["update_text"].visible = False
+
+        if update_widgets["update_table"].value == "Usuários":
+            update_widgets["input_01"].label = "Nome"
+            update_widgets["input_02"].label = "Email"
+            update_widgets["input_03"].label = "Senha"
+            update_widgets["drop_01"].label = "Admin"
+            update_widgets["drop_02"].label = "Status"
+
+            update_widgets["input_03"].password = True
+
+            update_widgets["input_01"].visible = True
+            update_widgets["input_02"].visible = True
+            update_widgets["input_03"].visible = True
+            update_widgets["drop_01"].visible = True
+            update_widgets["drop_02"].visible = True
+            update_widgets["button_update"].visible = True
+
+            update_widgets["input_04"].visible = False
+            update_widgets["input_05"].visible = False
+            update_widgets["input_06"].visible = False
+            update_widgets["input_07"].visible = False
+            update_widgets["button_date"].visible = False
+            update_widgets["button_date2"].visible = False
+
+        elif update_widgets["update_table"].value == "Jogos":
+            update_widgets["input_01"].label = "Nome"
+            update_widgets["input_02"].label = "Preço"
+            update_widgets["input_03"].label = "Quantidade"
+            update_widgets["input_04"].label = "Gênero"
+            update_widgets["input_05"].label = "descrição"
+
+            update_widgets["input_03"].password = False
+
+            update_widgets["input_01"].visible = True
+            update_widgets["input_02"].visible = True
+            update_widgets["input_03"].visible = True
+            update_widgets["input_04"].visible = True
+            update_widgets["input_05"].visible = True
+            update_widgets["button_update"].visible = True
+
+            update_widgets["input_06"].visible = False
+            update_widgets["input_07"].visible = False
+            update_widgets["drop_01"].visible = False
+            update_widgets["drop_02"].visible = False
+            update_widgets["button_date"].visible = False
+            update_widgets["button_date2"].visible = False
+
+
+        elif update_widgets["update_table"].value == "Aluguéis":
+            update_widgets["input_01"].label = "ID do usuário"
+            update_widgets["input_02"].label = "ID do jogo"
+            update_widgets["input_06"].label = "Data de aluguel"
+            update_widgets["input_07"].label = "Data de devolução"
+
+            update_widgets["input_03"].password = False
+
+            update_widgets["input_01"].visible = True
+            update_widgets["input_02"].visible = True
+            update_widgets["input_06"].visible = True
+            update_widgets["input_07"].visible = True
+            update_widgets["button_date"].visible = True
+            update_widgets["button_date2"].visible = True
+            update_widgets["button_update"].visible = True
+
+            update_widgets["input_03"].visible = False
+            update_widgets["input_04"].visible = False
+            update_widgets["input_05"].visible = False
+            update_widgets["drop_01"].visible = False
+            update_widgets["drop_02"].visible = False
+            
+
+        update_view.update()
+        page.update()
+
+    def update_database_click(e: ControlEvent):
+
+        if update_widgets["update_table"].value == "Usuários":
+            if update_widgets["input_01"].value not in ["", None]:
+                name = update_widgets["input_01"].value
+            else:
+                name = None
+
+            if update_widgets["input_02"].value not in ["", None]:
+                email = update_widgets["input_02"].value
+            else:
+                email = None
+
+            if update_widgets["input_03"].value not in ["", None]:
+                password = update_widgets["input_03"].value
+            else:
+                password = None
+            
+            if update_widgets["drop_01"].value not in ["", None]:
+                admin = update_widgets["drop_01"].value
+            else:
+                admin = None
+
+            if update_widgets["drop_02"].value not in ["", None]:
+                status = update_widgets["drop_02"].value
+            else:
+                status = None
+
+            request = UpdateController().update_user(name=name, email=email, password=password, admin=admin, status=status, filter_column=update_widgets["update_column"].value, filter_value=update_widgets["update_input_filter"].value)
+
+            if request["status"] == "error":
+                update_widgets["update_text"].value = request["message"]
+                update_widgets["update_text"].visible = True
+                page.update()
+                return None
+            
+            update_widgets["update_text"].value = request["message"]
+            update_widgets["update_text"].visible = True
+
+            update_widgets["update_input_filter"].value = ""
+            update_widgets["input_01"].value = ""
+            update_widgets["input_02"].value = ""
+            update_widgets["input_03"].value = ""
+            update_widgets["drop_01"].value = None
+            update_widgets["drop_02"].value = None
+
+            page.update()
+
+        elif update_widgets["update_table"].value == "Jogos":
+            name = update_widgets["input_01"].value
+            price = update_widgets["input_02"].value
+            quantity = update_widgets["input_03"].value
+            genre = update_widgets["input_04"].value
+            description = update_widgets["input_05"].value
+
+            request = ""
+
+        elif update_widgets["update_table"].value == "Aluguéis":
+            user_id = update_widgets["input_01"].value
+            game_id = update_widgets["input_02"].value
+            loan_date = update_widgets["input_06"].value
+            return_date = update_widgets["input_07"].value
+
+            request = ""
+
+        if request["status"] == "error":
+            update_widgets["update_text"].value = request["message"]
+            update_widgets["update_text"].visible = True
+            page.update()
+            return None
+        
+        update_widgets["update_text"].value = request["message"]
+        update_widgets["update_text"].visible = True
+
+        update_widgets["update_input_filter"].value = ""
+        update_widgets["input_01"].value = ""
+        update_widgets["input_02"].value = ""
+        update_widgets["input_03"].value = ""
+        update_widgets["input_04"].value = ""
+        update_widgets["input_05"].value = ""
+        update_widgets["input_06"].value = ""
+
+        page.update()
+
+    def update_date_click(e: ControlEvent):
+        formatted_date = e.control.value.strftime("%d/%m/%Y")
+        update_widgets["input_06"].value = formatted_date
+        page.update()
+
+    def update_date2_click(e: ControlEvent):
+        formatted_date = e.control.value.strftime("%d/%m/%Y")
+        update_widgets["input_07"].value = formatted_date
+        page.update()
+
 
 
     ### WIDGETS DO APLICATIVO ###
@@ -551,16 +775,6 @@ def main(page: Page):
             border_color=ft.Colors.PURPLE_500,
             border_width=2
         ),
-        "drop_02": ft.Dropdown(
-            options=[
-                ft.DropdownOption(key="True", content=ft.Text(value="True", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)),
-                ft.DropdownOption(key="False", content=ft.Text(value="False", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD))
-            ],
-            visible=False,
-            width=300,
-            border_color=ft.Colors.PURPLE_500,
-            border_width=2
-        ),
         "button_insert": ft.ElevatedButton(
             text="INSERIR", 
             icon=ft.Icons.CHECK,
@@ -586,7 +800,8 @@ def main(page: Page):
             value="Jogos",
             width=150,
             border_color=ft.Colors.PURPLE_300,
-            border_width=2
+            border_width=2,
+            on_change=update_columns_click
         ),
         "update_column": ft.Dropdown(
             options=[
@@ -595,13 +810,13 @@ def main(page: Page):
                 ft.DropdownOption(key="Preço", content=ft.Text("Preço", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)),
                 ft.DropdownOption(key="Quantidade", content=ft.Text("Quantidade", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)),
                 ft.DropdownOption(key="Gênero", content=ft.Text("Gênero", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)),
-                ft.DropdownOption(key="Data de aluguel", content=ft.Text("Data de aluguel", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)),
-                ft.DropdownOption(key="Data de devolução", content=ft.Text("Data de devolução", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD))
+                ft.DropdownOption(key="Descrição", content=ft.Text("descrição", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)),
             ],
             value="ID",
             width=150,
             border_color=ft.Colors.PURPLE_300,
-            border_width=2
+            border_width=2,
+            on_change=update_add_filter_click
         ),
         "update_input_filter": ft.TextField(label="Filtro", width=150, border_color=ft.Colors.PURPLE_300, border_width=2),
         "update_select_filter": ft.Dropdown(
@@ -609,6 +824,7 @@ def main(page: Page):
                 ft.DropdownOption(key="True", content=ft.Text(value="True", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)),
                 ft.DropdownOption(key="False", content=ft.Text(value="False", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD))
             ],
+            label="Filtro",
             visible=False,
             width=150,
             border_color=ft.Colors.PURPLE_300,
@@ -620,12 +836,26 @@ def main(page: Page):
         "input_04": ft.TextField(label="Gênero",width=300, border_color=ft.Colors.PURPLE_500, border_width=2, visible= True),
         "input_05": ft.TextField(label="Descrição",width=300, border_color=ft.Colors.PURPLE_500, border_width=2, visible= True),
         "input_06": ft.TextField(width=300, border_color=ft.Colors.PURPLE_500, border_width=2, visible= False),
+        "input_07": ft.TextField(width=300, border_color=ft.Colors.PURPLE_500, border_width=2, visible= False),
         "button_date": ft.IconButton(
             on_click=lambda e: page.open(
                 ft.DatePicker(
                     first_date= datetime.now().date(),
                     last_date= datetime(year=2050, month=12, day=31),
-                    on_change=insert_date_click
+                    on_change=update_date_click
+
+                )
+            ),
+            icon=ft.Icons.DATE_RANGE,
+            icon_color=ft.Colors.PURPLE_300,
+            visible= False
+        ),
+        "button_date2": ft.IconButton(
+            on_click=lambda e: page.open(
+                ft.DatePicker(
+                    first_date= datetime.now().date(),
+                    last_date= datetime(year=2050, month=12, day=31),
+                    on_change=update_date2_click
 
                 )
             ),
@@ -657,10 +887,11 @@ def main(page: Page):
             text="ATUALIZAR", 
             icon=ft.Icons.CHECK,
             width=150,
+            on_click=update_database_click,
             style=ft.ButtonStyle(
                 bgcolor=ft.Colors.PURPLE_600,
                 icon_color=ft.Colors.WHITE,
-                color=ft.Colors.WHITE,
+                color=ft.Colors.WHITE
             )
         ),
         "update_text": ft.Text(value="", visible=False, color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)
@@ -883,7 +1114,6 @@ def main(page: Page):
                             insert_widgets["input_04"],
                             insert_widgets["input_05"],
                             insert_widgets["drop_01"],
-                            insert_widgets["drop_02"],
                             ft.Container(
                                 margin=ft.margin.only(left=50),
                                 content=ft.Row(
@@ -932,7 +1162,7 @@ def main(page: Page):
                         horizontal_alignment=ft.CrossAxisAlignment.CENTER,                        
                         controls=[
                             ft.Container(
-                                margin=ft.margin.only(bottom=10, top=70),
+                                margin=ft.margin.only(bottom=20, top=70),
                                 content=ft.Row(
                                     alignment=ft.MainAxisAlignment.CENTER,
                                     controls=[
@@ -956,11 +1186,22 @@ def main(page: Page):
                                         update_widgets["drop_01"],
                                         update_widgets["drop_02"],
                                         ft.Container(
+                                            margin=ft.margin.only(left=50),
                                             content=ft.Row(
                                                 alignment=ft.MainAxisAlignment.CENTER,
                                                 controls=[
                                                     update_widgets["input_06"],
                                                     update_widgets["button_date"]
+                                                ]
+                                            )
+                                        ),
+                                        ft.Container(
+                                            margin=ft.margin.only(left=50),
+                                            content=ft.Row(
+                                                alignment=ft.MainAxisAlignment.CENTER,
+                                                controls=[
+                                                    update_widgets["input_07"],
+                                                    update_widgets["button_date2"]
                                                 ]
                                             )
                                         ),

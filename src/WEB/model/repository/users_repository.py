@@ -101,27 +101,41 @@ class UsersRepository:
         except Exception as error:
             return None
 
-    def update(self, id:int, name:str = None, email:str = None, password:int = None, admin:bool = None) -> bool | None:
-        parameters = {"user_name": name, "user_email": email, "user_password": password, "user_admin": admin}
+    def update(self, filter: dict, name:str = None, email:str = None, password:int = None, admin:bool = None, status:bool = None) -> bool | None:
+        parameters = {"user_name": name, "user_email": email, "user_password": password, "user_admin": admin, "user_status": status}
+        parameters_update = {}
 
         for key, value in parameters.items():
-            if value:
-                parameters = {key, value}
+            if value != None:
+                parameters_update[f"{key}"] = value
         
         try:
             with self.__connection_db as connection:
-                user = connection.session.query(Users).filter(Users.user_id == id).first()
-
-                if not user:
-                    return False
                 
-                connection.session.query(Users).filter(Users.user_id == id).update(parameters)
+                if filter["column"] == "user_id":
+                    connection.session.query(Users).filter(Users.user_id == filter["value"]).update(parameters_update)
+
+                elif filter["column"] == "user_name":
+                    connection.session.query(Users).filter(Users.user_name == filter["value"]).update(parameters_update)
+
+                elif filter["column"] == "user_email":
+                    connection.session.query(Users).filter(Users.user_email == filter["value"]).update(parameters_update)
+
+                elif filter["column"] == "user_password":
+                    connection.session.query(Users).filter(Users.user_password == filter["value"]).update(parameters_update)
+
+                elif filter["column"] == "user_admin":
+                    connection.session.query(Users).filter(Users.user_admin == filter["value"]).update(parameters_update)
+
+                elif filter["column"] == "user_status":
+                    connection.session.query(Users).filter(Users.user_status == filter["value"]).update(parameters_update)
+
                 connection.session.commit()
                 return True
 
         except Exception as error:
             connection.session.rollback()
-            raise None
+            return False
 
 
     def delete(self, id:int) -> bool:

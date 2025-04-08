@@ -2,3 +2,4 @@ from .create_user_controller import CreateUserController
 from .login_account_controller import LoginAccountController
 from .select_controller import SelectController
 from .insert_controller import InsertController
+from .update_controller import UpdateController

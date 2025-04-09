@@ -54,7 +54,11 @@ def main(page: Page):
 
         elif page.controls[0] == update_view:
             if e.key == "Enter":
-                update_database_click(e)
+                page.open(update_alert)
+
+        elif page.controls[0] == delete_view:
+            if e.key == "Enter":
+                page.open(delete_alert)
 
     page.on_keyboard_event = key_press_click
 
@@ -772,7 +776,7 @@ def main(page: Page):
         if e.control.text == "SIM":
             delete_database(e)
 
-            
+     
 
     ### WIDGETS DO APLICATIVO ###
 

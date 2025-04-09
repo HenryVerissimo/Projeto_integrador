@@ -1,7 +1,7 @@
 import flet as ft
 from flet import ControlEvent, Page
 from datetime import datetime
-from src.ADM.controllers import CreateUserController, LoginAccountController, SelectController, InsertController, UpdateController
+from src.ADM.controllers import CreateUserController, LoginAccountController, SelectController, InsertController, UpdateController, DeleteController
 
 
 def main(page: Page):
@@ -725,14 +725,32 @@ def main(page: Page):
 
         id = delete_widgets["delete_id_input"].value
 
+        if id is None:
+            delete_widgets["delete_text"].value = "Forneça um ID para deletar um registro!"
+            delete_widgets["delete_text"].visible = True
+            page.update()
+            return None
+        
+        if id.strip() == "":
+            delete_widgets["delete_text"].value = "Forneça um ID para deletar um registro!"
+            delete_widgets["delete_text"].visible = True
+            page.update()
+            return None            
+
         if delete_widgets["delete_table"].value == "Usuários":
-            request = ""
+            request = DeleteController().delete_user(id=id)
 
-        if delete_widgets["delete_table"].value == "Jogos":
-            request = ""
+        elif delete_widgets["delete_table"].value == "Jogos":
+            request = DeleteController().delete_game(id=id)
 
-        if delete_widgets["delete_table"].value == "Aluguéis":
-            request = ""
+        elif delete_widgets["delete_table"].value == "Aluguéis":
+            request = DeleteController().delete_game_rental(id=id)
+
+        else:
+            delete_widgets["delete_text"].value = "Escolha uma tabela para deletar um registro!"
+            delete_widgets["delete_text"].visible = True
+            page.update()
+            return None
 
         if request["status"] == "error":
             delete_widgets["delete_text"].value = request["message"]
@@ -1053,8 +1071,7 @@ def main(page: Page):
                 color=ft.Colors.WHITE
             )
         ),
-        "delete_text": ft.Text(value="", visible=False, color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD),
-        "alert_text": ft.Text(value="REGISTROS SÃO DELETADOS PERMANENTEMENTE!", color=ft.Colors.PURPLE_400, font_family="LilitaOne-Regular", size=15)
+        "delete_text": ft.Text(value="", visible=False, color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)
 
     }
 
@@ -1434,16 +1451,6 @@ def main(page: Page):
                             delete_widgets["button_delete"],
                             delete_widgets["delete_text"],
                             
-                        ]
-                    )
-                ),
-
-                ft.Container(
-                    margin=ft.margin.only(top=180),
-                    content=ft.Row(
-                        alignment=ft.MainAxisAlignment.CENTER,
-                        controls=[
-                            delete_widgets["alert_text"]    
                         ]
                     )
                 )

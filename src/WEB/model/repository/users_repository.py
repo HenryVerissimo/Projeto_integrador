@@ -139,8 +139,8 @@ class UsersRepository:
 
 
     def delete(self, id:int) -> bool:
-        try:
-            with self.__connection_db as connection:
+        with self.__connection_db as connection:
+            try:
                 request = connection.session.query(Users).filter(Users.user_id == id).first()
 
                 if not request:
@@ -150,6 +150,6 @@ class UsersRepository:
                 connection.session.commit()
                 return True
 
-        except Exception as error:
-            connection.session.rollback()
-            raise None
+            except Exception as error:
+                connection.session.rollback()
+                return None

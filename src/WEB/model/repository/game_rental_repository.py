@@ -105,16 +105,31 @@ class GameRentalRepository:
                     return None
  
 
-    def update(self, id: int, user_id=None, game_id=None, game_rental_date=None, game_return_date=None) -> bool:
+    def update(self, filter: dict, user_id=None, game_id=None, game_rental_date=None, game_return_date=None) -> bool:
         parameters = {"user_id": user_id, "game_id": game_id, "game_rental_date": game_rental_date, "game_return_date": game_return_date}
+        parameters_update = {}
 
         for key, value in parameters.items():
-            if value:
-                parameters = {key: value}
+            if value != None:
+                parameters_update[f"{key}"] = value
 
         with self.__connection_db as connection:
             try:
-                connection.session.query(GameRental).filter(GameRental.game_id == id).update(parameters)
+                if filter["column"] == "game_rental_id":
+                    connection.session.query(GameRental).filter(GameRental.game_rental_id == filter["value"]).update(parameters_update)
+
+                elif filter["column"] == "user_id":
+                    connection.session.query(GameRental).filter(GameRental.user_id == filter["value"]).update(parameters_update)
+
+                elif filter["column"] == "game_id":
+                    connection.session.query(GameRental).filter(GameRental.game_id == filter["value"]).update(parameters_update)
+
+                elif filter["column"] == "game_rental_date":
+                    connection.session.query(GameRental).filter(GameRental.game_rental_date == filter["value"]).update(parameters_update)
+
+                elif filter["column"] == "game_return_date":
+                    connection.session.query(GameRental).filter(GameRental.game_return_date == filter["value"]).update(parameters_update)
+
                 connection.session.commit()
                 return True
 

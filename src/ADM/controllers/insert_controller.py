@@ -19,6 +19,9 @@ class InsertController():
 
         if self.__validate_string_to_float_conversion(price):
             return {"status": "error", "message": "Preço precisa ser um número!"}
+        
+        if self.__validate_negative_number(price):
+            return {"status": "error", "message": "Preço nao pode ser negativo!"}
                
         if self.__validate_string_to_integer_conversion(quantity):
             return {"status": "error", "message": "Quantidade precisa ser um número!"}
@@ -30,6 +33,7 @@ class InsertController():
             return {"status": "error", "message": "O gênero do jogo precisa ter menos de 100 caracteres!"}
         
         name = name.strip()
+        price = self.__convert_comma_to_period(price)
         price = float(price)
         quantity = int(quantity)
         genre = genre.strip()
@@ -184,6 +188,17 @@ class InsertController():
             return False
         
         return True
+    
+    def __convert_comma_to_period(self, data: str) -> str:
+
+        if "," in data:
+            data = data.replace(",", ".")
+
+        return data
+    
+    def __validate_negative_number(self, data: str) -> bool:
+        data = float(data)
+        return data < 0
     
     def __validate_email_exists(self, email:str) -> bool:
 

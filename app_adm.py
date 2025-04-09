@@ -590,21 +590,90 @@ def main(page: Page):
             page.update()
 
         elif update_widgets["update_table"].value == "Jogos":
-            name = update_widgets["input_01"].value
-            price = update_widgets["input_02"].value
-            quantity = update_widgets["input_03"].value
-            genre = update_widgets["input_04"].value
-            description = update_widgets["input_05"].value
+            if update_widgets["input_01"].value not in ["", None]:
+                name = update_widgets["input_01"].value
+            else:
+                name = None
 
-            request = ""
+            if update_widgets["input_02"].value not in ["", None]:
+                price = update_widgets["input_02"].value
+            else:
+                price = None
+            
+            if update_widgets["input_03"].value not in ["", None]:
+                quantity = update_widgets["input_03"].value
+            else:
+                quantity = None
+
+            if update_widgets["input_04"].value not in ["", None]:
+                genre = update_widgets["input_04"].value
+            else:
+                genre = None
+            
+            if update_widgets["input_05"].value not in ["", None]:
+                description = update_widgets["input_05"].value
+            else:
+                description = None
+
+            request = UpdateController().update_game(name=name, price=price, quantity=quantity, genre=genre, description=description, filter_column=update_widgets["update_column"].value, filter_value=update_widgets["update_input_filter"].value)
+
+            if request["status"] == "error":
+                update_widgets["update_text"] = request["message"]
+                update_widgets["update_text"].visible = True
+                page.update()
+                return None
+            
+            update_widgets["update_text"].value = request["message"]
+            update_widgets["update_text"].visible = True
+
+            update_widgets["input_01"].label = ""
+            update_widgets["input_02"].label = ""
+            update_widgets["input_03"].label = ""
+            update_widgets["input_04"].label = ""
+            update_widgets["input_05"].label = ""
+
+            page.update()
+
+
 
         elif update_widgets["update_table"].value == "Aluguéis":
-            user_id = update_widgets["input_01"].value
-            game_id = update_widgets["input_02"].value
-            loan_date = update_widgets["input_06"].value
-            return_date = update_widgets["input_07"].value
+            if update_widgets["input_01"].value not in ["", None]:
+                user_id = update_widgets["input_01"].value
+            else:
+                user_id = None
 
-            request = ""
+            if update_widgets["input_02"].value not in ["", None]:
+                game_id = update_widgets["input_02"].value
+            else:
+                game_id = None
+            
+            if update_widgets["input_06"].value not in ["", None]:
+                rental_date = update_widgets["input_06"].value
+            else:
+                rental_date = None
+
+            if update_widgets["input_07"].value not in ["", None]:
+                return_date = update_widgets["input_07"].value
+            else:
+                return_date = None
+
+            request = UpdateController().update_rental(user_id=user_id, game_id=game_id, rental_date=rental_date, return_date=return_date, filter_column=update_widgets["update_column"].value, filter_value=update_widgets["update_input_filter"].value)
+
+            if request["status"] == "error":
+                update_widgets["update_text"].value = request["message"]
+                update_widgets["update_text"].visible = True
+                page.update()
+                return None
+            
+            update_widgets["update_text"].value = request["message"]
+            update_widgets["update_text"].visible = True
+
+            update_widgets["input_01"].value = ""
+            update_widgets["input_02"].value = ""
+            update_widgets["input_06"].value = ""
+            update_widgets["input_07"].value = ""
+
+            page.update()
 
         if request["status"] == "error":
             update_widgets["update_text"].value = request["message"]

@@ -52,6 +52,10 @@ def main(page: Page):
             if e.key == "Enter":
                 insert_database_click(e)
 
+        elif page.controls[0] == update_view:
+            if e.key == "Enter":
+                update_database_click(e)
+
     page.on_keyboard_event = key_press_click
 
 
@@ -81,6 +85,9 @@ def main(page: Page):
     def go_to_operations_click(e: ControlEvent):
         page.controls.clear()
 
+        login_widgets["text_error"].visible = False
+        create_account_widgets["text_error"].visible = False
+
         if home_bar_widgets["select_operations"].value == "CONSULTAR":
             page.add(select_view)
 
@@ -89,6 +96,9 @@ def main(page: Page):
 
         if home_bar_widgets["select_operations"].value == "ATUALIZAR":
             page.add(update_view)
+
+        if home_bar_widgets["select_operations"].value == "DELETAR":
+            page.add(delete_view)
 
         page.update()
 
@@ -124,8 +134,8 @@ def main(page: Page):
             return None
         
         page.controls.clear()
-        select_widgets["text_error"].value = ""
-        select_widgets["text_error"].visible = False
+        create_account_widgets["text_error"].value = ""
+        create_account_widgets["text_error"].visible = False
         select_results.content = select_widgets["text_no_results"]
         page.add(select_view)
         page.update()
@@ -618,7 +628,7 @@ def main(page: Page):
             request = UpdateController().update_game(name=name, price=price, quantity=quantity, genre=genre, description=description, filter_column=update_widgets["update_column"].value, filter_value=update_widgets["update_input_filter"].value)
 
             if request["status"] == "error":
-                update_widgets["update_text"] = request["message"]
+                update_widgets["update_text"].value = request["message"]
                 update_widgets["update_text"].visible = True
                 page.update()
                 return None
@@ -704,7 +714,47 @@ def main(page: Page):
         update_widgets["input_07"].value = formatted_date
         page.update()
 
+    def update_close_alert(e: ControlEvent):
+        page.close(update_alert)
+        page.update()
 
+        if e.control.text == "SIM":
+            update_database_click(e)
+
+    def delete_database(e: ControlEvent):
+
+        id = delete_widgets["delete_id_input"].value
+
+        if delete_widgets["delete_table"].value == "Usuários":
+            request = ""
+
+        if delete_widgets["delete_table"].value == "Jogos":
+            request = ""
+
+        if delete_widgets["delete_table"].value == "Aluguéis":
+            request = ""
+
+        if request["status"] == "error":
+            delete_widgets["delete_text"].value = request["message"]
+            delete_widgets["delete_text"].visible = True
+            page.update()
+            return None
+        
+        delete_widgets["delete_text"]. value = request["message"]
+        delete_widgets["delete_text"].visible = True
+
+        delete_widgets["delete_id_input"].value = ""
+
+        page.update()
+
+    def delete_close_alert(e: ControlEvent):
+        page.close(delete_alert)
+        page.update()
+
+        if e.control.text == "SIM":
+            delete_database(e)
+
+            
 
     ### WIDGETS DO APLICATIVO ###
 
@@ -826,7 +876,11 @@ def main(page: Page):
                 ft.DatePicker(
                     first_date= datetime.now().date(),
                     last_date= datetime(year=2050, month=12, day=31),
-                    on_change=insert_date_click
+                    on_change=insert_date_click,
+                    cancel_text= "Cancelar",
+                    confirm_text= "Confirmar",
+                    field_label_text= "data de devolução",
+                    help_text="Escolha uma data"
 
                 )
             ),
@@ -911,8 +965,11 @@ def main(page: Page):
                 ft.DatePicker(
                     first_date= datetime.now().date(),
                     last_date= datetime(year=2050, month=12, day=31),
-                    on_change=update_date_click
-
+                    on_change=update_date_click,
+                    cancel_text= "Cancelar",
+                    confirm_text= "Confirmar",
+                    field_label_text= "data de aluguel",
+                    help_text="Escolha uma data"
                 )
             ),
             icon=ft.Icons.DATE_RANGE,
@@ -924,8 +981,11 @@ def main(page: Page):
                 ft.DatePicker(
                     first_date= datetime.now().date(),
                     last_date= datetime(year=2050, month=12, day=31),
-                    on_change=update_date2_click
-
+                    on_change=update_date2_click,
+                    cancel_text= "Cancelar",
+                    confirm_text= "Confirmar",
+                    field_label_text= "data de devolução",
+                    help_text="Escolha uma data"
                 )
             ),
             icon=ft.Icons.DATE_RANGE,
@@ -956,7 +1016,7 @@ def main(page: Page):
             text="ATUALIZAR", 
             icon=ft.Icons.CHECK,
             width=150,
-            on_click=update_database_click,
+            on_click=lambda e: page.open(update_alert),
             style=ft.ButtonStyle(
                 bgcolor=ft.Colors.PURPLE_600,
                 icon_color=ft.Colors.WHITE,
@@ -967,12 +1027,64 @@ def main(page: Page):
 
     }
 
+    delete_widgets = {
+        "image": ft.Image(src="src/ADM/assets/images/lixeira.png", width=150, height=150),
+        "title": ft.Text(value="DELETAR DADOS", color=ft.Colors.PURPLE_300, font_family="LilitaOne-Regular", size=30),
+        "delete_table": ft.Dropdown(
+            options=[
+                ft.DropdownOption(key="Usuários", content=ft.Text(value="Usuários", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)),
+                ft.DropdownOption(key="Jogos", content=ft.Text(value="Jogos", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD)),
+                ft.DropdownOption(key="Aluguéis", content=ft.Text(value="Aluguéis", color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD))
+            ],
+            label="Tabela",
+            width=150,
+            border_color=ft.Colors.PURPLE_500,
+            border_width=2
+        ),
+        "delete_id_input": ft.TextField(label="ID", width=150, border_color=ft.Colors.PURPLE_500, border_width=2),
+        "button_delete": ft.ElevatedButton(
+            text="DELETAR",
+            icon=ft.Icons.DELETE,
+            width=300,
+            on_click=lambda e: page.open(delete_alert),
+            style=ft.ButtonStyle(
+                bgcolor=ft.Colors.PURPLE_500,
+                icon_color=ft.Colors.WHITE,
+                color=ft.Colors.WHITE
+            )
+        ),
+        "delete_text": ft.Text(value="", visible=False, color=ft.Colors.WHITE, weight=ft.FontWeight.BOLD),
+        "alert_text": ft.Text(value="REGISTROS SÃO DELETADOS PERMANENTEMENTE!", color=ft.Colors.PURPLE_400, font_family="LilitaOne-Regular", size=15)
+
+    }
+
 
     ### WIDGETS DINÂMICOS ###
 
         
     select_results = ft.Container(
         content=select_widgets["text_no_results"],
+    )
+
+    update_alert = ft.AlertDialog(
+        modal=True,
+        title=ft.Text(value="Atualizar registro(s)"),
+        content=ft.Text(value="Certeza que deseja fazer a atualização de dados?"),
+        actions=[
+            ft.TextButton(text="SIM", on_click=update_close_alert, style=ft.ButtonStyle(color=ft.Colors.PURPLE_300)),
+            ft.TextButton(text="NÃO", on_click=update_close_alert, style=ft.ButtonStyle(color=ft.Colors.PURPLE_300))
+        ]
+    )
+
+    delete_alert = ft.AlertDialog(
+        modal=True,
+        title=ft.Text(value="Deletar registro"),
+        content=ft.Text(value="Certeza que deseja deletar o registro permanentemente?"),
+        actions=[
+            ft.TextButton(text="SIM", on_click=delete_close_alert, style=ft.ButtonStyle(color=ft.Colors.PURPLE_300)),
+            ft.TextButton(text="NÃO", on_click=delete_close_alert, style=ft.ButtonStyle(color=ft.Colors.PURPLE_300))
+        ],
+        actions_alignment=ft.MainAxisAlignment.END,
     )
 
 
@@ -1279,6 +1391,59 @@ def main(page: Page):
                                     ]
                                 )
                             )
+                        ]
+                    )
+                )
+            ]
+        )
+    )
+
+    delete_view = ft.Container(
+        content=ft.ResponsiveRow(
+            controls=[
+                ft.Container(
+                    content=home_bar
+                ),
+
+                ft.Container(
+                    margin=ft.margin.only(bottom=40, top=40),
+                    content=ft.Column(
+                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                        controls=[
+                            delete_widgets["image"],
+                            delete_widgets["title"]
+                        ]
+                    )
+                ),
+
+                ft.Container(
+                    content=ft.Row(
+                        alignment=ft.MainAxisAlignment.CENTER,
+                        controls=[
+                            delete_widgets["delete_table"],
+                            delete_widgets["delete_id_input"]
+                        ]
+                    )
+                ),
+
+                ft.Container(
+                    margin=ft.margin.only(top=10),
+                    content=ft.Column(
+                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                        controls=[
+                            delete_widgets["button_delete"],
+                            delete_widgets["delete_text"],
+                            
+                        ]
+                    )
+                ),
+
+                ft.Container(
+                    margin=ft.margin.only(top=180),
+                    content=ft.Row(
+                        alignment=ft.MainAxisAlignment.CENTER,
+                        controls=[
+                            delete_widgets["alert_text"]    
                         ]
                     )
                 )

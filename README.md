@@ -22,12 +22,12 @@ ___
 ### **⚙️App de administração**
 
 #### **Sobre**: 
-O app de administração é um  aplicativo desktop que foi desenvolvido com o objetivo de ser utilizado como uma ferramenta na gestão e suporte ao site de locação de jogos, GameOver. Suas funcionalidades incluem a possibilidade de realizar operações de CRUD (Create, Read, Update e Delete) em um banco de dados MySQL, permitindo que os administradores do site possam gerenciar os dados de forma eficiente e prática. O app foi desenvolvido utilizando a linguagem Python, o micro-framework Flet para a interface gráfica, o MySQL para persistência dos dados e o ORM do SQLAlchemy para fazer o mapeamento das tabelas do banco de dados e trabalhar com registros do mesmo utilizando objetos, proporcionando uma experiência amigável e intuitiva para os usuários.
+O app de administração é um aplicativo desktop desenvolvido com o objetivo de ser utilizado como ferramenta na gestão e no suporte ao site de locação de jogos GameOver. Suas funcionalidades incluem a possibilidade de realizar operações de CRUD (Create, Read, Update e Delete) em um banco de dados MySQL, permitindo que os administradores do site gerenciem os dados de forma eficiente e prática. O app foi desenvolvido utilizando a linguagem Python, o microframework Flet para a interface gráfica, o MySQL para persistência dos dados e o ORM SQLAlchemy para mapear as tabelas do banco de dados e trabalhar com seus registros por meio de objetos, proporcionando uma experiência amigável e intuitiva aos usuários.
 
 <br>
 
-#### **Funcionalidades**:
-A seguir estão listadas as funcionalidades do app de administração e algumas imagens ilustrativas de cada uma delas.
+#### **Funcionalidades**: 
+A seguir estão listadas as funcionalidades do aplicativo de administração e alguns prints de cada uma delas.
 
 **TELA DE LOGIN**: As contas dos usuários administradores são armazenadas em um banco de dados, e o app realiza a autenticação através de um sistema de login.
 <img src="images/login_print.png">
@@ -39,7 +39,7 @@ A seguir estão listadas as funcionalidades do app de administração e algumas 
 
 <br>
 
-**TELA DE CONSULTA**: Permite visualizar todos os registros nas tabelas do banco de dados, além de ter a possibilidade de filtrar os dados se necessário.
+**TELA DE CONSULTA**: Permite visualizar todos os registros das tabelas do banco de dados, além de ter a possibilidade de filtrar os dados se necessário.
 <img src="images/select_print.png">
 
 <br>
@@ -49,7 +49,7 @@ A seguir estão listadas as funcionalidades do app de administração e algumas 
 
 <br>
 
-**TELA DE ATUALIZAÇÃO**: Permite atualizar os dados de um registro já existente no banco de dados em qualquer tabela.
+**TELA DE ATUALIZAÇÃO**: Permite atualizar os dados de registros já existentes no banco de dados em qualquer tabela.
 <img src="images/update_print.png">
 
 <br>

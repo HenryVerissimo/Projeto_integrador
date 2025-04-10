@@ -4,7 +4,7 @@ from flask.views import MethodView
 
 class HomeBlueprint:
     def __init__(self):
-        self.home_bp = Blueprint("home", __name__, url_prefix="/", template_folder="src/templates/home")
+        self.home_bp = Blueprint("home", __name__, url_prefix="/", template_folder="src/WEB/templates/home")
         self.build_routes()
 
     def build_routes(self):

@@ -106,19 +106,19 @@ class InsertController():
     def insert_game_rental(self, user_id: str, game_id: str, date_return: str) -> dict:
 
         if self.__validate_required_fields(user_id):
-            return {"status": "error", "message": "O campo com ID do usuário precisa ser preenchido!"}
+            return {"status": "error", "message": "O campo com ID do aluguel precisa ser preenchido!"}
         
         if self.__validate_required_fields(game_id):
-            return {"status": "error", "message": "O campo com ID do jogo precisa ser preenchido!"}
+            return {"status": "error", "message": "O campo com ID do aluguel precisa ser preenchido!"}
         
         if self.__validate_required_fields(date_return):
             return {"status": "error", "message": "O campo com data de entrega do jogo precisa ser preenchido!"}
         
         if self.__validate_string_to_integer_conversion(user_id):
-            return {"status": "error", "message": "ID do usuário precisa ser um número inteiro!"}
+            return {"status": "error", "message": "ID do aluguel precisa ser um número inteiro!"}
         
         if self.__validate_string_to_integer_conversion(game_id):
-            return {"status": "error", "message": "ID do jogo precisa ser um número inteiro!"}
+            return {"status": "error", "message": "ID do aluguel precisa ser um número inteiro!"}
         
         if self.__validate_date(date_return):
             return {"status": "error", "message": "Data de entrega precisa ser uma data válida!"}

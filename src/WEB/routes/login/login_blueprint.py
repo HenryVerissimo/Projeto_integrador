@@ -4,7 +4,7 @@ from flask.views import MethodView
 
 class LoginBlueprint:
     def __init__(self):
-        self.login_bp = Blueprint("Login", __name__, url_prefix="/login", template_folder="src/templates/login")
+        self.login_bp = Blueprint("Login", __name__, url_prefix="/login", template_folder="src/WEB/templates/login")
         self.build_routes()
 
     def build_routes(self):

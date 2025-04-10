@@ -8,10 +8,21 @@
 
 ___
 
+### **📑Dependências**:
+- Python 3.12.3
+- Flask 3.1.0
+- Flask-SQLAlchemy 3.1.1
+- Flet 0.27.6
+- PyMySQ 1.1.1
+- MySQL 8.0.41
+
+
+___
+
 ### **⚙️App de administração**
 
 #### **Sobre**: 
-O app de administração é um  aplicativo desktop que foi desenvolvido com o objetivo de ser utilizado como uma ferramenta na gestão e suporte ao site de locação de jogos, GameOver. Suas funcionalidades incluem a possibilidade de realizar operações de CRUD (Create, Read, Update e Delete) em um banco de dados MySQL, permitindo que os administradores do site possam gerenciar os dados de forma eficiente e prática. O app foi desenvolvido utilizando a linguagem Python e o micro-framework Flet para a interface gráfica, proporcionando uma experiência amigável e intuitiva para os usuários.
+O app de administração é um  aplicativo desktop que foi desenvolvido com o objetivo de ser utilizado como uma ferramenta na gestão e suporte ao site de locação de jogos, GameOver. Suas funcionalidades incluem a possibilidade de realizar operações de CRUD (Create, Read, Update e Delete) em um banco de dados MySQL, permitindo que os administradores do site possam gerenciar os dados de forma eficiente e prática. O app foi desenvolvido utilizando a linguagem Python, o micro-framework Flet para a interface gráfica, o MySQL para persistência dos dados e o ORM do SQLAlchemy para fazer o mapeamento das tabelas do banco de dados e trabalhar com registros do mesmo utilizando objetos, proporcionando uma experiência amigável e intuitiva para os usuários.
 
 <br>
 
@@ -28,7 +39,7 @@ A seguir estão listadas as funcionalidades do app de administração e algumas 
 
 <br>
 
-**TELA DE CONSULTA**: Permite visualizar todos os registros nas tabelas do banco de dados, além de poderem filtrar os dados se necessário.
+**TELA DE CONSULTA**: Permite visualizar todos os registros nas tabelas do banco de dados, além de ter a possibilidade de filtrar os dados se necessário.
 <img src="images/select_print.png">
 
 <br>

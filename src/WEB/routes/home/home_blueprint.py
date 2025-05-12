@@ -13,7 +13,7 @@ class HomeBlueprint:
 
 class HomeRoute(MethodView):
     def get(self):
-        return render_template("home/home.html")
+        return "essa é a home" #render_template("home/home.html")
     
     def post(self):
         pass

@@ -1,5 +1,7 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, redirect, url_for, request
 from flask.views import MethodView
+
+from src.WEB.controllers.login_account_controller import LoginAccountController
 
 
 class LoginBlueprint:
@@ -16,4 +18,13 @@ class LoginRoute(MethodView):
         return render_template("login/login.html")
     
     def post(self):
-        pass
+        email = request.form["email"]
+        password = request.form["password"]
+
+        response = LoginAccountController().login_account(email=email, password=password)
+
+        if response["status"] == "success":
+            return redirect("/")
+        
+        return render_template("login/login.html", error=response["message"])
+

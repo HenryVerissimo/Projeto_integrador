@@ -6,7 +6,7 @@ from src.WEB.controllers.login_account_controller import LoginAccountController
 
 class LoginBlueprint:
     def __init__(self):
-        self.login_bp = Blueprint("Login", __name__, url_prefix="/login", template_folder="src/WEB/templates/login")
+        self.login_bp = Blueprint("Login", __name__, url_prefix="/login", template_folder="templates/login")
         self.build_routes()
 
     def build_routes(self):

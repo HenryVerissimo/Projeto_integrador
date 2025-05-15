@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Locação de Jogos</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <header class="header">
+    <div class="left-section">
+      <div class="logo"></div>
+
+      <button class="brand-name">GAME OVER
+         <a  
+          href=""><!--link do index.html-->
+        </a>
+      </button>
+    </div>
+    <input type="text" placeholder="Pesquisar jogos..." class="search-bar">
+    <div class="nav-icons">
+      <button class ="nav-icon">Catálogo 
+        <a 
+          href=""> <!--link do catlogo.html-->
+        </a>
+
+      <button class ="nav-icon">Aluguel
+        <a 
+          href=""> <!--link do aluguel.html-->
+        </a>
+
+      </button>
+      <div class="profile-icon" onclick="toggleDropdown()">
+  <div class="dropdown-menu" id="dropdownMenu">
+    <a href="">Entrar</a> <!--link do login_roxo.html-->
+  </div>
+</div>
+  </header>
+<br>
+<br>
+  <main>
+    <section class="destaques">
+      <h2 class="glow-title">Jogos mais em conta</h2>
+      <section class="carousel-section">
+        <button class="arrow left" onclick="moveLeft()">&#10094;</button>
+        <div class="carousel" id="carousel">
+          <!-- Imagens do carrossel -->
+          {% for game in games %}
+            {% if game["price"] <= 100 %}
+              <div class="card">
+                <a href="produto.html"> <!--Link produto.html--> 
+                  <img src="static/imgs/{{ game['name'].lower().replace(' ', '_') }}_capa.jpg"/>
+                </a>
+              </div>
+            {% endif %}
+          {% endfor %}
+          <button class="arrow right" onclick="moveRight()">&#10095;</button>
+        </section>
+        
+        <script src="script.js"></script>
+        <br>
+        <br>
+        <br>
+        <section class="lancamentos">
+          <h2 class="glow-title">Jogos de tiro</h2>
+          <br>
+          <div class="lancamentos-wrapper">
+            <button class="lanc-seta esquerda">&#x276E;</button>
+            <div class="lancamentos-carousel">
+              <div class="lancamentos-inner">
+          {% for game in games %}
+            {% if game["genre"].lower() == "tiro" %}
+              <div class="lanc-card">
+                <a href="produto.html">
+                  <img src="static/imgs/{{ game['name'].lower().replace(' ', '_') }}_capa.jpg" alt="capa do jogo">
+                </a>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      <button class="lanc-seta direita">&#x276F;</button>
+    </div>
+  </section>
+  <script src="static/script.js"></script>
+  
+    </main>
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-logo">GAME OVER</div>
+        <div class="footer-links">
+          <a href="#">Sobre</a>
+          <a href="#">Contato</a>
+        <a href="#">Termos de Uso</a>
+        <a href="#">Privacidade</a>
+      </div>
+      <p class="footer-copy">© 2025 GAME OVER. Todos os direitos reservados.</p>
+    </div>
+  </footer>    
+</body>
+</html>

@@ -6,7 +6,7 @@ from src.WEB.routes.create import CreateBlueprint
 
 class MyApplication:
     def __init__(self):
-        self.app = Flask(__name__, template_folder="src/WEB/templates", static_folder="src/WEB/style")
+        self.app = Flask(__name__, template_folder="templates", static_url_path="/static", static_folder="static")
         self.build_blueprints()
 
     def build_blueprints(self):

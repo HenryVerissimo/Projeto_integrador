@@ -6,7 +6,7 @@ from src.WEB.controllers.create_user_controller import CreateUserController
 
 class CreateBlueprint:
     def __init__(self):
-        self.create_bp = Blueprint("create", __name__, url_prefix="/create", template_folder="src/WEB/templates/create")
+        self.create_bp = Blueprint("create", __name__, url_prefix="/create", template_folder="templates/create")
         self.build_routes()
 
     def build_routes(self):

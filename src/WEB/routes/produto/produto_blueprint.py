@@ -18,7 +18,15 @@ class ProdutoRoute(MethodView):
     def get(self, id):
 
         response = SelectController.select_games_by_filter("ID", id)
+        url_trailer = f"static/imgs/trailers/{response['response'][0]["name"].lower().replace(' ', '_')}_trailer.txt"
 
-        return render_template("produto/produto.html", game=response["response"][0])
+        try:
+            with open(url_trailer, "r") as arquivo:
+                link_trailer = arquivo.read()
+            
+            return render_template("produto/produto.html", game=response["response"][0], trailer=link_trailer)
+        except:
+
+            return render_template("produto/produto.html", game=response["response"][0])
     
 

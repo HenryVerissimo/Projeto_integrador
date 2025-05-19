@@ -46,7 +46,7 @@
         {% if pesquisa %}
           {% if pesquisa.lower() in game["name"].lower() %}
             <div class="game-card">
-              <a href="produto/{{ game['id'] }}">
+              <a href="/produto/{{ game['id'] }}">
                 <img src="../../static/imgs/{{ game['name'].lower().replace(' ', '_') }}_capa.jpg" alt="capa do jogo">
                 <h3>{{ game["name"] }}</h3>
                 <p>R${{ game["price"] }}
@@ -57,7 +57,7 @@
           {% endif %}
         {% else %}
           <div class="game-card">
-            <a href="produto/{{ game['id'] }}">
+            <a href="/produto/{{ game['id'] }}">
               <img src="../../static/imgs/{{ game['name'].lower().replace(' ', '_') }}_capa.jpg" alt="capa do jogo">
               <h3>{{ game["name"] }}</h3>
               <p>R${{ game["price"] }}

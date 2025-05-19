@@ -45,14 +45,13 @@
       <div class="product">
         <div class="imagem-com-carrossel">
           <img id="main-image" src="../../static/imgs/{{ game['name'].lower().replace(' ', '_') }}_capa.jpg" alt="Nome do Jogo">
-
           <div class="thumbnail-carousel">
             <img src="../../static/imgs/{{ game['name'].lower().replace(' ', '_') }}_capa.jpg" onclick="trocarImagem(this)">
-         <img class="video-thumb" src="https://img.youtube.com/vi/c0i88t0Kacs/hqdefault.jpg" 
-               data-video="https://www.youtube.com/embed/c0i88t0Kacs" 
-               onclick="trocarImagem(this)">
-
-
+            {% if trailer %}
+              <img class="video-thumb" src="../../static/imgs/thumbs/{{ game['name'].lower().replace(' ', '_') }}_thumb.jpg" 
+                data-video="{{ trailer }}" 
+                onclick="trocarImagem(this)">
+            {% endif %}
             <img src="../../static/imgs/screenshots/{{ game['name'].lower().replace(' ', '_') }}_img1.jpg" onclick="trocarImagem(this)">
             <img src="../../static/imgs/screenshots/{{ game['name'].lower().replace(' ', '_') }}_img2.jpg" onclick="trocarImagem(this)">
             <img src="../../static/imgs/screenshots/{{ game['name'].lower().replace(' ', '_') }}_img3.jpg" onclick="trocarImagem(this)">

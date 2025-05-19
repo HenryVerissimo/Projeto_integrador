@@ -2,6 +2,12 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from abc import ABC, abstractmethod
 
+from os import getenv
+from dotenv import load_dotenv
+
+load_dotenv()
+url_db = getenv("URL_DB")
+
 
 class ConnectionInterfaceDB(ABC):
  
@@ -24,7 +30,7 @@ class ConnectionInterfaceDB(ABC):
 
 class ConnectionMysqlDB(ConnectionInterfaceDB):
     def __init__(self):
-        self.__engine_string = "mysql+pymysql://Henry:senha1234@localhost:3306/LocacaoJogos"
+        self.__engine_string = f"{url_db}"
         self.__engine = self._create_engine()
         self.session = None
 

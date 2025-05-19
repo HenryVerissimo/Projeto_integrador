@@ -28,8 +28,12 @@ body {
 .logo {
   width: 50px;
   height: 50px;
-  background-color: white;
+  background-color: rgb(64, 9, 71);
   border-radius: 50%;
+}
+
+.user-icon {
+  width: 50px;
 }
 
 .brand-name {
@@ -88,6 +92,11 @@ h2 {
   margin-bottom: 25px;
   font-size: 2rem;
   text-align: center;
+}
+
+.logo-projeto {
+  width: 50px;
+  padding-left: 2px;
 }
 
 .carousel-container {
@@ -499,6 +508,8 @@ h2 {
 
 .ps4-grid {
   display: grid;
+  text-align: center;
+  justify-items: center;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 2rem;
   max-width: 1330px;
@@ -506,6 +517,8 @@ h2 {
 }
 
 .game-card {
+  width: 422px;
+  height: 573px;
   background-color: #1f1f1f;
   border-radius: 16px;
   overflow: hidden;
@@ -513,6 +526,7 @@ h2 {
   box-shadow: 0 0 0 transparent;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   text-align: center;
+  margin: 0;
 }
 
 .game-card img {
@@ -661,9 +675,9 @@ body {
 }
 
 .profile-icon {
-  width: 35px;
-  height: 35px;
-  background-color: #fff;
+  width: 50px;
+  height: 50px;
+  background-color: #360644;
   border-radius: 50%;
   position: relative;
   cursor: pointer;

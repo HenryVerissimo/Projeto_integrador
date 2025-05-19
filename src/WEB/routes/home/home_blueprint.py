@@ -2,7 +2,7 @@ from flask import Blueprint, render_template
 from flask.views import MethodView
 
 
-from src.WEB.controllers.select_games_controller import SelectGamesController
+from src.WEB.controllers.select_controller import SelectController
 
 
 class HomeBlueprint:
@@ -17,8 +17,7 @@ class HomeBlueprint:
 class HomeRoute(MethodView):
     def get(self):
 
-        request = SelectGamesController.select_all_games()
-        print(request["response"])
+        request = SelectController.select_all_games()
 
         return render_template("home/home.html", games=request["response"])
     

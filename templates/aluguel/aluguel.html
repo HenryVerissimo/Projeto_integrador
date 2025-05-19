@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Locação de Jogos</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <!-- Cabeçalho vindo do index.html -->
+  <header class="header">
+    <div class="left-section">
+      <div class="logo">
+        <img class="logo-projeto" src="../../static/imgs/logo_projeto.png" alt="logo do projeto">  
+      </div>
+
+      <a href="/">
+        <button class="brand-name">GAME OVER</button>  
+      </a>
+    </div>
+    <form action="/catalogo" method="post">
+      <input name="pesquisa" text" placeholder="Pesquisar jogos..." class="search-bar">
+    </form>
+    <div class="nav-icons">
+      <a href="/">
+      <button class ="nav-icon">Início</button>  
+      </a>
+      <a href="/catalogo">
+        <button class ="nav-icon">Catálogo</button>   
+      </a>
+
+      <div class="profile-icon" onclick="toggleDropdown()">
+        <img class="user-icon" src="../../static/imgs/user_icon.png" alt="user icon">
+      </div>
+        
+      <div class="dropdown-menu" id="dropdownMenu">
+        <a href="/login">Entrar</a>
+      </div>
+</div>
+  </header>
+  <main>
+    <section class="historico-aluguel">
+      <h2 class="glow-title">MEUS JOGOS ALUGADOS</h2>
+      <div class="alugados-lista">
+        {% for aluguel in alugueis %}
+          {% for game in games %}
+            {% if game["id"] == aluguel["game_id"] %}
+              <div class="alugado-card">
+                <img src="../../static/imgs/{{ game['name'].lower().replace(' ', '_') }}_capa.jpg" alt="Capa do jogo">
+                <div class="info-alugado">
+                  <h3>{{ game["name"] }}</h3>
+                  <p>Data de Aluguel: {{ aluguel["rental_date"] }}</p>
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+        {% endfor %}
+
+      </div>
+    </section>
+  </main>
+
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-logo">GAME OVER</div>
+      <div class="footer-links">
+        <a href="#">Sobre</a>
+        <a href="#">Contato</a>
+        <a href="#">Termos de Uso</a>
+        <a href="#">Privacidade</a>
+      </div>
+      <p class="footer-copy">© 2025 GAME OVER. Todos os direitos reservados.</p>
+    </div>
+  </footer> 
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  
+</body>
+</html>

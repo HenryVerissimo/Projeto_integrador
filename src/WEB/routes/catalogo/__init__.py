@@ -1,0 +1,1 @@
+from .catalogo_blueprint import CatalogoBlueprint

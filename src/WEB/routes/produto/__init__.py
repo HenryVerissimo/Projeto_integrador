@@ -1,0 +1,1 @@
+from .produto_blueprint import ProdutoBlueprint

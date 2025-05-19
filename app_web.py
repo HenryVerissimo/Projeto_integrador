@@ -3,6 +3,9 @@ from flask import Flask
 from src.WEB.routes.home import HomeBlueprint
 from src.WEB.routes.login import LoginBlueprint
 from src.WEB.routes.create import CreateBlueprint
+from src.WEB.routes.catalogo import CatalogoBlueprint
+from src.WEB.routes.aluguel import AluguelBlueprint
+from src.WEB.routes.produto import ProdutoBlueprint
 
 class MyApplication:
     def __init__(self):
@@ -13,6 +16,9 @@ class MyApplication:
         self.app.register_blueprint(HomeBlueprint().home_bp)
         self.app.register_blueprint(LoginBlueprint().login_bp)
         self.app.register_blueprint(CreateBlueprint().create_bp)
+        self.app.register_blueprint(CatalogoBlueprint().catalogo_bp)
+        self.app.register_blueprint(AluguelBlueprint().aluguel_bp)
+        self.app.register_blueprint(ProdutoBlueprint().produto_bp)
 
     def run_application(self):
         self.app.run(debug=True, port=5000)

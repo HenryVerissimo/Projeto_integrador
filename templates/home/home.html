@@ -9,7 +9,9 @@
 <body>
   <header class="header">
     <div class="left-section">
-      <div class="logo"></div>
+      <div class="logo">
+        <img class="logo-projeto" src="../../static/imgs/logo_projeto.png" alt="logo do projeto">  
+      </div>
 
       <button class="brand-name">GAME OVER
          <a  
@@ -17,30 +19,30 @@
         </a>
       </button>
     </div>
-    <input type="text" placeholder="Pesquisar jogos..." class="search-bar">
+    <form action="/catalogo" method="post">
+      <input name="pesquisa" text" placeholder="Pesquisar jogos..." class="search-bar">
+    </form>
     <div class="nav-icons">
-      <button class ="nav-icon">Catálogo 
-        <a 
-          href=""> <!--link do catlogo.html-->
-        </a>
-
-      <button class ="nav-icon">Aluguel
-        <a 
-          href=""> <!--link do aluguel.html-->
-        </a>
-
-      </button>
+      <a href="/catalogo">
+        <button class ="nav-icon">Catálogo</button>   
+      </a>
+      <a href="/aluguel">
+        <button class ="nav-icon">Aluguel</button>   
+      </a>
       <div class="profile-icon" onclick="toggleDropdown()">
-  <div class="dropdown-menu" id="dropdownMenu">
-    <a href="">Entrar</a> <!--link do login_roxo.html-->
-  </div>
-</div>
+        <img class="user-icon" src="../../static/imgs/user_icon.png" alt="user icon">
+      </div>
+        
+      <div class="dropdown-menu" id="dropdownMenu">
+        <a href="/login">Entrar</a>
+      </div>
+    </div>
   </header>
 <br>
 <br>
   <main>
     <section class="destaques">
-      <h2 class="glow-title">Jogos mais em conta</h2>
+      <h2 class="glow-title">JOGOS MAIS EM CONTA</h2>
       <section class="carousel-section">
         <button class="arrow left" onclick="moveLeft()">&#10094;</button>
         <div class="carousel" id="carousel">
@@ -48,7 +50,7 @@
           {% for game in games %}
             {% if game["price"] <= 100 %}
               <div class="card">
-                <a href="produto.html"> <!--Link produto.html--> 
+                <a href="produto/{{ game['id'] }}">
                   <img src="static/imgs/{{ game['name'].lower().replace(' ', '_') }}_capa.jpg"/>
                 </a>
               </div>
@@ -62,7 +64,7 @@
         <br>
         <br>
         <section class="lancamentos">
-          <h2 class="glow-title">Jogos de tiro</h2>
+          <h2 class="glow-title">JOGOS DE TIRO</h2>
           <br>
           <div class="lancamentos-wrapper">
             <button class="lanc-seta esquerda">&#x276E;</button>
@@ -71,7 +73,7 @@
           {% for game in games %}
             {% if game["genre"].lower() == "tiro" %}
               <div class="lanc-card">
-                <a href="produto.html">
+                <a href="produto/{{ game['id'] }}">
                   <img src="static/imgs/{{ game['name'].lower().replace(' ', '_') }}_capa.jpg" alt="capa do jogo">
                 </a>
               </div>
@@ -82,7 +84,7 @@
       <button class="lanc-seta direita">&#x276F;</button>
     </div>
   </section>
-  <script src="static/script.js"></script>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
   
     </main>
     <footer class="footer">

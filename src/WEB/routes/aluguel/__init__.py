@@ -1,0 +1,1 @@
+from .aluguel_blueprint import AluguelBlueprint

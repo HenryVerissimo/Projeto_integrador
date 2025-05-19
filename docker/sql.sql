@@ -1,3 +1,4 @@
+CREATE DATABASE LocacaoJogos;
 USE LocacaoJogos;
 
 CREATE TABLE games (
@@ -34,12 +35,12 @@ INSERT INTO games (game_name, game_price, game_quantity, game_genre, game_descri
 ("Ratchet e Clank rift apart", 300, 50, "aventura", "Aventura espacial futurista"),
 ("Fifa 2022", 300, 200, "fotebol", "Fotebol de campo"),
 ("Call of Duty Black ops 6", 350, 60, "tiro", "Guerra, anaquilação, apocalipse e muito caos"),
-("Red_Dead_Redemption_2", 300, 70, "tiro", "tiroteio no faroeste"),
+("Red Dead Redemption 2", 300, 70, "tiro", "tiroteio no faroeste"),
 ("Minecraft", 100, 200, "aventura", "contruindo um mundo de blocos"),
 ("Fallout 4", 250, 38, "tiro", "sobrevivência em um mundo pós apocaliptico"),
 ("The Last of Us Remastered", 350, 80, "tiro", "sobrevivência no apocalipse zumbi"),
 ("Rayman Legends", 90, 45, "aventura", "A Clareira dos Sonhos está novamente em apuros!"),
-("God_of_War_Ragnarok", 300, 85, "acao", "Deuses se decendo na porradaria!"),
+("God of War Ragnarok", 300, 85, "acao", "Deuses se decendo na porradaria!"),
 ("Cuphead", 45, 130, "aventura", "Resolvendo pendências com o capiroto"),
 ("Dont Starve Together", 50, 55, "aventura", "Sobrevivendo ao desconhecido"),
 ("Resident Evil Village", 250, 25, "tiro", "sobreviva aos horrores"),

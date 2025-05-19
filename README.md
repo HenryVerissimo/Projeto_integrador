@@ -61,6 +61,9 @@ ___
 
 ### **⚙️Site de locação de jogos**
 
+#### **Sobre**: 
+A aplicação WEB foi desenvolvida com o objetivo de ser utilizado como uma sollução para os altos preços dos jogos, por meio da locação de mídias digitais. Suas funcionalidades incluem a possibilidade de navegar pelo catálogo, ver fotos e trailers de jogos, pesquisar jogos específicos e viasualizar o histórico de jogos já alugados anteriormente. O app foi desenvolvido utilizando a linguagem Python, o micro microframework Flask para o gerenciamento de rotas, o MySQL para persistência dos dados e o ORM SQLAlchemy para mapear as tabelas do banco de dados e trabalhar com seus registros por meio de objetos, proporcionando uma experiência amigável e intuitiva aos usuários.
+
 **TELA DE LOGIN**: Usuários podem se conectar as suas contas.
 <img src="screenshots/tela_de_login.png">
 

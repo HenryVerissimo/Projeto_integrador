@@ -59,3 +59,30 @@ A seguir estão listadas as funcionalidades do aplicativo de administração e a
 
 ___
 
+### **⚙️Site de locação de jogos**
+
+**TELA DE LOGIN**: Usuários podem se conectar as suas contas.
+<img src="images/screenshots/tela_de_login.png">
+
+<br>
+
+**TELA DE CADASTRO**: Novos usuários podem se cadastrar no site.
+<img src="screenshots/tela_criacao_de_conta.png">
+
+<br>
+
+**HOME DO SITE**: Usuários tem a opção de escolher entre os jogos mais baratos e jogos de tiro.
+<img src="screenshots/home_site.png">
+<img src="screenshots/home_site2.png">
+
+<br>
+
+**CATÀLOGO DE JOGOS**: Página com todos os jogos disponíveis no site.
+<img src="screenshots/catalogo_site.png">
+
+**PÁGINA DE PRODUTO**: Informações, imagens e trailer sobre o jogo selecionado.
+<img src="screenshots/produto_site.png">
+
+**HISTÒRICO DE LOCAÇÕES**: Histórico de locações de jogos do usuário.
+<img src="screenshots/alugueis.png">
+<hr>

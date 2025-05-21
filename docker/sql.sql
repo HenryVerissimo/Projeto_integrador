@@ -40,7 +40,7 @@ INSERT INTO games (game_name, game_price, game_quantity, game_genre, game_descri
 ("Fallout 4", 55, 38, "tiro", "sobrevivência em um mundo pós apocaliptico"),
 ("The Last of Us Remastered", 70, 80, "tiro", "sobrevivência no apocalipse zumbi"),
 ("Rayman Legends", 30, 45, "aventura", "A Clareira dos Sonhos está novamente em apuros!"),
-("God of War Ragnarok", 50, 85, "acao", "Deuses se decendo na porradaria!"),
+("God of War Ragnarok", 70, 85, "acao", "Deuses se decendo na porradaria!"),
 ("Cuphead", 45, 130, "aventura", "Resolvendo pendências com o capiroto"),
 ("Dont Starve Together", 30, 55, "aventura", "Sobrevivendo ao desconhecido"),
 ("Resident Evil Village", 60, 25, "tiro", "sobreviva aos horrores"),

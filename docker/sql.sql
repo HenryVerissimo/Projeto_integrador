@@ -30,22 +30,22 @@ CREATE TABLE game_rental (
 );
 
 INSERT INTO games (game_name, game_price, game_quantity, game_genre, game_description) VALUES 
-("Borderlands 3", 300, 20, "tiro", "RPG de tiro cartoonizado"),
-("Batman lego 2", 50, 100, "aventura", "Lego baseado nas histórias do Batman"),
-("Ratchet e Clank rift apart", 300, 50, "aventura", "Aventura espacial futurista"),
-("Fifa 2022", 300, 200, "fotebol", "Fotebol de campo"),
-("Call of Duty Black ops 6", 350, 60, "tiro", "Guerra, anaquilação, apocalipse e muito caos"),
-("Red Dead Redemption 2", 300, 70, "tiro", "tiroteio no faroeste"),
-("Minecraft", 100, 200, "aventura", "contruindo um mundo de blocos"),
-("Fallout 4", 250, 38, "tiro", "sobrevivência em um mundo pós apocaliptico"),
-("The Last of Us Remastered", 350, 80, "tiro", "sobrevivência no apocalipse zumbi"),
-("Rayman Legends", 90, 45, "aventura", "A Clareira dos Sonhos está novamente em apuros!"),
-("God of War Ragnarok", 300, 85, "acao", "Deuses se decendo na porradaria!"),
+("Borderlands 3", 65, 20, "tiro", "RPG de tiro cartoonizado"),
+("Batman lego 2", 20, 100, "aventura", "Lego baseado nas histórias do Batman"),
+("Ratchet e Clank rift apart", 65, 50, "aventura", "Aventura espacial futurista"),
+("Fifa 2022", 50, 200, "fotebol", "Fotebol de campo"),
+("Call of Duty Black ops 6", 60, 60, "tiro", "Guerra, anaquilação, apocalipse e muito caos"),
+("Red Dead Redemption 2", 70, 70, "tiro", "tiroteio no faroeste"),
+("Minecraft", 20, 200, "aventura", "contruindo um mundo de blocos"),
+("Fallout 4", 50, 38, "tiro", "sobrevivência em um mundo pós apocaliptico"),
+("The Last of Us Remastered", 70, 80, "tiro", "sobrevivência no apocalipse zumbi"),
+("Rayman Legends", 30, 45, "aventura", "A Clareira dos Sonhos está novamente em apuros!"),
+("God of War Ragnarok", 50, 85, "acao", "Deuses se decendo na porradaria!"),
 ("Cuphead", 45, 130, "aventura", "Resolvendo pendências com o capiroto"),
-("Dont Starve Together", 50, 55, "aventura", "Sobrevivendo ao desconhecido"),
-("Resident Evil Village", 250, 25, "tiro", "sobreviva aos horrores"),
-("Sniper Elite 5", 120, 60, "tiro", "vença a guerra como um sniper"),
-("Farcry 6", 150, 90, "tiro", "Uma ilha no Caribe governada em regime de ditadura");
+("Dont Starve Together", 30, 55, "aventura", "Sobrevivendo ao desconhecido"),
+("Resident Evil Village", 60, 25, "tiro", "sobreviva aos horrores"),
+("Sniper Elite 5", 55, 60, "tiro", "vença a guerra como um sniper"),
+("Farcry 6", 60, 90, "tiro", "Uma ilha no Caribe governada em regime de ditadura");
 
 INSERT INTO users (user_name, user_email, user_password, user_admin, user_status) VALUES
   ('João Silva',       'joao.silva@example.com',       'a1B2c3D4', FALSE, TRUE),

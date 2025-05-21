@@ -48,7 +48,7 @@
         <div class="carousel" id="carousel">
           <!-- Imagens do carrossel -->
           {% for game in games %}
-            {% if game["price"] <= 100 %}
+            {% if game["price"] <= 50 %}
               <div class="card">
                 <a href="produto/{{ game['id'] }}">
                   <img src="static/imgs/{{ game['name'].lower().replace(' ', '_') }}_capa.jpg"/>

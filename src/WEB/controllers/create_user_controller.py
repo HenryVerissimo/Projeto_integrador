@@ -23,7 +23,7 @@ class CreateUserController:
         
         else:
 
-            request = UsersRepository(ConnectionMysqlDB()).insert(name=name, email=email, password=password, admin=True)
+            request = UsersRepository(ConnectionMysqlDB()).insert(name=name, email=email, password=password, admin=False)
 
             if not request:
                 response = {"status": "error", "message": "Erro ao tentar registrar usuário!" }

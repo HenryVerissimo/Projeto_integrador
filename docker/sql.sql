@@ -1,4 +1,3 @@
-CREATE DATABASE LocacaoJogos;
 USE LocacaoJogos;
 
 CREATE TABLE games (
